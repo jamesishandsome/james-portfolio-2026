@@ -1,4 +1,4 @@
-import { Home, Briefcase, Code, PlusSquare, Heart, Award } from "lucide-react";
+import { Home, Briefcase, Code, PlusSquare, Award } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 import { skills } from "../data/resume";
 import { useNavigate, useLocation } from "react-router-dom";

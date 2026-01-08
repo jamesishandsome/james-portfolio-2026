@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Play, Github, Mail, Phone, MapPin, Award } from "lucide-react";
+import { Github, Mail, MapPin, Award } from "lucide-react";
 import { experience, projects, skills, profile } from "../data/resume";
 import Card from "../components/Card";
 import { useEffect } from "react";
