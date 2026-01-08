@@ -91,7 +91,6 @@ export const profile = {
   name: "James Hu",
   title: "Full-stack Developer",
   email: "me@jameshu.me",
-  phone: "+852 65612892",
   github: "https://github.com/jamesishandsome",
   location: "Hong Kong",
   education: "Bachelor of Engineering in Computer Science - HKUST",

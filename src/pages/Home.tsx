@@ -84,10 +84,6 @@ function Home() {
                 <span className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" /> {profile.location}
                 </span>
-                <span className="hidden md:inline w-1 h-1 bg-white rounded-full"></span>
-                <span className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" /> {profile.phone}
-                </span>
               </motion.div>
             </div>
           </div>
@@ -101,13 +97,6 @@ function Home() {
         transition={{ delay: 0.7 }}
         className="flex items-center gap-6 mb-10"
       >
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-[#1DB954] text-black rounded-full p-4 shadow-lg hover:shadow-[#1DB954]/20"
-        >
-          <Play fill="black" className="w-7 h-7 ml-1" />
-        </motion.button>
         <motion.a
           whileHover={{ scale: 1.05, borderColor: "white", color: "white" }}
           whileTap={{ scale: 0.95 }}

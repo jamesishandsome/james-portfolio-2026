@@ -64,29 +64,29 @@ const D3Demo = () => {
       .force(
         "link",
         d3
-          .forceLink(links)
-          .id((d: any) => d.id)
+          .forceLink<Node, Link>(links)
+          .id((d) => d.id)
           .distance(100),
       )
       .force("charge", d3.forceManyBody().strength(-300))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force(
         "collide",
-        d3.forceCollide().radius((d: any) => d.radius + 10),
+        d3.forceCollide<Node>().radius((d) => d.radius + 10),
       );
 
     const link = svg
       .append("g")
       .attr("stroke", "#999")
       .attr("stroke-opacity", 0.6)
-      .selectAll("line")
+      .selectAll<SVGLineElement, Link>("line")
       .data(links)
       .join("line")
       .attr("stroke-width", (d) => Math.sqrt(d.value) * 2);
 
     const node = svg
       .append("g")
-      .selectAll("circle")
+      .selectAll<SVGCircleElement, Node>("circle")
       .data(nodes)
       .join("circle")
       .attr("r", (d) => d.radius)
@@ -96,11 +96,11 @@ const D3Demo = () => {
       })
       .attr("stroke", "#fff")
       .attr("stroke-width", 1.5)
-      .call(drag(simulation) as any);
+      .call(drag(simulation));
 
     const label = svg
       .append("g")
-      .selectAll("text")
+      .selectAll<SVGTextElement, Node>("text")
       .data(nodes)
       .join("text")
       .text((d) => d.id)
@@ -113,35 +113,39 @@ const D3Demo = () => {
 
     simulation.on("tick", () => {
       link
-        .attr("x1", (d: any) => d.source.x)
-        .attr("y1", (d: any) => d.source.y)
-        .attr("x2", (d: any) => d.target.x)
-        .attr("y2", (d: any) => d.target.y);
+        .attr("x1", (d) => (d.source as Node).x ?? 0)
+        .attr("y1", (d) => (d.source as Node).y ?? 0)
+        .attr("x2", (d) => (d.target as Node).x ?? 0)
+        .attr("y2", (d) => (d.target as Node).y ?? 0);
 
-      node.attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
+      node.attr("cx", (d) => d.x ?? 0).attr("cy", (d) => d.y ?? 0);
 
-      label.attr("x", (d: any) => d.x).attr("y", (d: any) => d.y);
+      label.attr("x", (d) => d.x ?? 0).attr("y", (d) => d.y ?? 0);
     });
 
     function drag(simulation: d3.Simulation<Node, undefined>) {
-      function dragstarted(event: any) {
+      function dragstarted(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
         event.subject.fx = event.subject.x;
         event.subject.fy = event.subject.y;
       }
 
-      function dragged(event: any) {
+      function dragged(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
         event.subject.fx = event.x;
         event.subject.fy = event.y;
       }
 
-      function dragended(event: any) {
+      function dragended(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
         if (!event.active) simulation.alphaTarget(0);
         event.subject.fx = null;
         event.subject.fy = null;
       }
 
-      return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
+      return d3
+        .drag<SVGCircleElement, Node>()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
     }
   };
 

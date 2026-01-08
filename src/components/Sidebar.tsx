@@ -1,9 +1,9 @@
 import { Home, Briefcase, Code, PlusSquare, Heart, Award } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { skills } from "../data/resume";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -14,7 +14,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, x: -20 },
   visible: {
     opacity: 1,
@@ -110,12 +110,6 @@ const Sidebar = () => {
               <PlusSquare className="w-6 h-6" />
             </div>
             <span className="font-bold">Contact</span>
-          </div>
-          <div className="flex items-center gap-4 text-[#B3B3B3] hover:text-white transition-colors group cursor-pointer">
-            <div className="bg-gradient-to-br from-indigo-600 to-blue-300 p-1 rounded-sm opacity-70 group-hover:opacity-100 transition-opacity">
-              <Heart className="w-6 h-6 text-white fill-white" />
-            </div>
-            <span className="font-bold">Liked Projects</span>
           </div>
         </motion.div>
       </div>
