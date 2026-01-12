@@ -93,5 +93,5 @@ export const profile = {
   email: "me@jameshu.me",
   github: "https://github.com/jamesishandsome",
   location: "Hong Kong",
-  education: "Bachelor of Engineering in Computer Science - HKUST",
+  education: "Bachelor of Science in Computer Science - HKBU",
 };
