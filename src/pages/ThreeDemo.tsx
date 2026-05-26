@@ -1,10 +1,10 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Sphere, MeshDistortMaterial, Stars, Float } from "@react-three/drei";
+import { Float, MeshDistortMaterial, OrbitControls, Sphere, Stars } from "@react-three/drei";
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
+import { gsap, useGSAP } from "../lib/gsap";
 
 const AnimatedSphere = () => {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -26,10 +26,10 @@ const AnimatedSphere = () => {
       onPointerOut={() => setHover(false)}
     >
       <MeshDistortMaterial
-        color={hovered ? "#1DB954" : "#4A90E2"}
+        color={hovered ? "#baff4f" : "#5ee9ff"}
         attach="material"
-        distort={0.5}
-        speed={2}
+        distort={hovered ? 0.78 : 0.5}
+        speed={hovered ? 3 : 2}
         roughness={0.2}
         metalness={0.8}
       />
@@ -39,34 +39,47 @@ const AnimatedSphere = () => {
 
 const ThreeDemo = () => {
   const navigate = useNavigate();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      tl.fromTo(".three-copy > *", { autoAlpha: 0, y: -24, filter: "blur(10px)" }, { autoAlpha: 1, y: 0, filter: "blur(0px)", stagger: 0.09, duration: 0.78 })
+        .fromTo(".hud-card", { autoAlpha: 0, x: 24, filter: "blur(8px)" }, { autoAlpha: 1, x: 0, filter: "blur(0px)", stagger: 0.08, duration: 0.7 }, "-=0.42");
+
+      gsap.to(".three-aurora-a", { xPercent: 8, yPercent: -6, duration: 6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+      gsap.to(".three-aurora-b", { xPercent: -7, yPercent: 5, duration: 7, repeat: -1, yoyo: true, ease: "sine.inOut" });
+      gsap.to(".hud-line", { scaleX: 1, transformOrigin: "0% 50%", duration: 1.6, stagger: 0.16, ease: "power2.inOut", repeat: -1, yoyo: true });
+    },
+    { scope: rootRef },
+  );
 
   return (
-    <div className="h-screen w-full bg-[#121212] relative overflow-hidden">
-      <div className="absolute top-0 left-0 p-8 z-10 w-full pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="pointer-events-auto"
+    <div ref={rootRef} className="relative h-screen w-full overflow-hidden bg-[#03060d] text-white">
+      <div className="three-aurora-a pointer-events-none absolute -left-36 top-20 z-0 h-[30rem] w-[30rem] rounded-full bg-cyan-400/18 blur-3xl" />
+      <div className="three-aurora-b pointer-events-none absolute -bottom-44 right-10 z-0 h-[34rem] w-[34rem] rounded-full bg-fuchsia-500/14 blur-3xl" />
+      <div className="three-copy pointer-events-none absolute left-0 top-0 z-10 w-full p-6 sm:p-8">
+        <button
+          onClick={() => navigate("/")}
+          className="pointer-events-auto mb-8 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-white/62 backdrop-blur-xl transition-colors hover:border-cyan-300/35 hover:text-white"
         >
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-[#B3B3B3] hover:text-white mb-8 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Home
-          </button>
+          <ArrowLeft className="h-5 w-5" />
+          Back home
+        </button>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-2">Three.js Experience</h1>
-          <p className="text-[#B3B3B3] max-w-xl">
-            Interactive 3D rendering in the browser using WebGL. Demonstrating custom shaders,
-            physics simulations, and reactive 3D environments.
+        <div className="max-w-3xl rounded-[2rem] border border-white/10 bg-black/25 p-5 backdrop-blur-xl">
+          <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">webgl sketch</div>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">A material test in orbit</h1>
+          <p className="mt-3 max-w-xl text-white/62">
+            A small scene for checking how motion, lighting, and camera drag feel before they become a heavier interface.
           </p>
-        </motion.div>
+        </div>
       </div>
 
       <Canvas className="absolute inset-0">
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <ambientLight intensity={0.55} />
+        <directionalLight position={[10, 10, 5]} intensity={1.2} />
+        <pointLight position={[-6, -4, 6]} intensity={1.5} color="#67e8f9" />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
         <Float speed={1.5} rotationIntensity={1} floatIntensity={2}>
           <AnimatedSphere />
@@ -74,12 +87,22 @@ const ThreeDemo = () => {
         <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
       </Canvas>
 
-      <div className="absolute bottom-8 right-8 z-10 text-right pointer-events-none hidden md:block">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
-          <p className="text-xs text-[#535353] font-mono">RENDERER: WEBGL2</p>
-          <p className="text-xs text-[#535353] font-mono">FPS: 60</p>
-          <p className="text-xs text-[#535353] font-mono">VERTICES: 12,402</p>
-        </motion.div>
+      <div className="absolute bottom-8 right-8 z-10 hidden w-72 space-y-3 text-right md:block">
+        {[
+          ["RENDERER", "WEBGL2"],
+          ["TARGET", "60 FPS"],
+          ["VERTICES", "12,402"],
+        ].map(([label, value]) => (
+          <div key={label} className="hud-card rounded-2xl border border-white/10 bg-black/28 p-3 backdrop-blur-xl">
+            <div className="flex items-center justify-between gap-3 font-mono text-xs uppercase tracking-[0.22em] text-white/42">
+              <span>{label}</span>
+              <span className="text-cyan-200">{value}</span>
+            </div>
+            <div className="mt-2 h-px overflow-hidden rounded-full bg-white/10">
+              <div className="hud-line h-full w-full scale-x-0 bg-gradient-to-r from-cyan-300 to-lime-300" />
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

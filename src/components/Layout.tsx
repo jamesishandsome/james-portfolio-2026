@@ -1,15 +1,36 @@
+import { type ReactNode, useRef } from "react";
 import Sidebar from "./Sidebar";
+import { gsap, useGSAP } from "../lib/gsap";
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+  const shellRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        ".site-main",
+        { autoAlpha: 0 },
+        {
+          autoAlpha: 1,
+          duration: 0.45,
+          clearProps: "visibility,opacity",
+        },
+      );
+    },
+    { scope: shellRef },
+  );
+
   return (
-    <div className="flex h-screen bg-black overflow-hidden">
+    <div ref={shellRef} className="site-shell flex h-screen overflow-hidden bg-[#030406] text-white">
       <Sidebar />
-      <main className="flex-1 bg-gradient-to-b from-surfaceHighlight to-background m-2 rounded-lg overflow-y-auto relative scrollbar-hide">
-        <div className="p-8 pb-32">{children}</div>
+      <main className="site-main relative m-2 flex-1 overflow-y-auto overflow-x-hidden rounded-[2rem] border border-white/10 bg-[#07090f] shadow-[0_0_80px_rgba(52,211,255,0.10)] scrollbar-hide">
+        <div className="scanline-overlay" aria-hidden="true" />
+        <div className="main-aurora" aria-hidden="true" />
+        <div className="relative z-10 px-4 py-5 pb-28 sm:px-7 lg:px-10">{children}</div>
       </main>
     </div>
   );

@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { motion } from "framer-motion";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { skills } from "../data/resume";
+import { gsap, useGSAP } from "../lib/gsap";
 
 interface Node extends d3.SimulationNodeDatum {
   id: string;
@@ -19,25 +19,50 @@ interface Link extends d3.SimulationLinkDatum<Node> {
 
 const D3Demo = () => {
   const navigate = useNavigate();
+  const rootRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const simulationRef = useRef<d3.Simulation<Node, undefined> | null>(null);
 
-  const initGraph = () => {
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        ".demo-chrome > *",
+        { autoAlpha: 0, y: -22, filter: "blur(10px)" },
+        { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.78, stagger: 0.08 },
+      );
+      gsap.fromTo(
+        ".reset-button",
+        { autoAlpha: 0, scale: 0.72, rotate: -90 },
+        { autoAlpha: 1, scale: 1, rotate: 0, duration: 0.8, ease: "back.out(1.8)", delay: 0.45 },
+      );
+      gsap.to(".demo-aurora", {
+        xPercent: 8,
+        yPercent: -5,
+        duration: 6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    },
+    { scope: rootRef },
+  );
+
+  const initGraph = useCallback(() => {
     if (!svgRef.current || !containerRef.current) return;
 
-    // Clear previous graph
+    simulationRef.current?.stop();
     d3.select(svgRef.current).selectAll("*").remove();
 
     const width = containerRef.current.clientWidth;
     const height = containerRef.current.clientHeight;
 
-    // Prepare data
     const nodes: Node[] = [
-      { id: "James Hu", group: 0, radius: 40 },
+      { id: "James Hu", group: 0, radius: 42 },
       ...skills.frontend.map((s) => ({ id: s, group: 1, radius: 20 })),
       ...skills.backend.map((s) => ({ id: s, group: 2, radius: 20 })),
-      ...skills.database.map((s) => ({ id: s, group: 3, radius: 15 })),
-      ...skills.cloud.map((s) => ({ id: s, group: 4, radius: 15 })),
+      ...skills.database.map((s) => ({ id: s, group: 3, radius: 16 })),
+      ...skills.cloud.map((s) => ({ id: s, group: 4, radius: 16 })),
     ];
 
     const links: Link[] = [
@@ -45,7 +70,6 @@ const D3Demo = () => {
       ...skills.backend.map((s) => ({ source: "James Hu", target: s, value: 1 })),
       ...skills.database.map((s) => ({ source: "James Hu", target: s, value: 1 })),
       ...skills.cloud.map((s) => ({ source: "James Hu", target: s, value: 1 })),
-      // Add some inter-connections for fun
       { source: "React", target: "TypeScript", value: 2 },
       { source: "Node.js", target: "TypeScript", value: 2 },
       { source: "Node.js", target: "MongoDB", value: 2 },
@@ -57,7 +81,14 @@ const D3Demo = () => {
     const svg = d3
       .select(svgRef.current)
       .attr("viewBox", [0, 0, width, height])
-      .style("background-color", "#121212");
+      .style("background", "transparent");
+
+    const defs = svg.append("defs");
+    const glow = defs.append("filter").attr("id", "node-glow").attr("x", "-80%").attr("y", "-80%").attr("width", "260%").attr("height", "260%");
+    glow.append("feGaussianBlur").attr("stdDeviation", "5").attr("result", "coloredBlur");
+    const merge = glow.append("feMerge");
+    merge.append("feMergeNode").attr("in", "coloredBlur");
+    merge.append("feMergeNode").attr("in", "SourceGraphic");
 
     const simulation = d3
       .forceSimulation(nodes)
@@ -66,19 +97,20 @@ const D3Demo = () => {
         d3
           .forceLink<Node, Link>(links)
           .id((d) => d.id)
-          .distance(100),
+          .distance(112),
       )
-      .force("charge", d3.forceManyBody().strength(-300))
+      .force("charge", d3.forceManyBody().strength(-330))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force(
         "collide",
-        d3.forceCollide<Node>().radius((d) => d.radius + 10),
+        d3.forceCollide<Node>().radius((d) => d.radius + 12),
       );
+    simulationRef.current = simulation;
 
     const link = svg
       .append("g")
-      .attr("stroke", "#999")
-      .attr("stroke-opacity", 0.6)
+      .attr("stroke", "#7dd3fc")
+      .attr("stroke-opacity", 0.42)
       .selectAll<SVGLineElement, Link>("line")
       .data(links)
       .join("line")
@@ -91,11 +123,12 @@ const D3Demo = () => {
       .join("circle")
       .attr("r", (d) => d.radius)
       .attr("fill", (d) => {
-        const colors = ["#ffffff", "#61dafb", "#3C873A", "#4DB33D", "#FF9900"];
-        return colors[d.group] || "#1DB954";
+        const colors = ["#ffffff", "#67e8f9", "#f7d45a", "#7cff70", "#ff67d8"];
+        return colors[d.group] || "#67e8f9";
       })
-      .attr("stroke", "#fff")
+      .attr("stroke", "rgba(255,255,255,0.8)")
       .attr("stroke-width", 1.5)
+      .attr("filter", "url(#node-glow)")
       .call(drag(simulation));
 
     const label = svg
@@ -105,11 +138,27 @@ const D3Demo = () => {
       .join("text")
       .text((d) => d.id)
       .attr("text-anchor", "middle")
-      .attr("dy", (d) => d.radius + 15)
-      .attr("fill", "#B3B3B3")
+      .attr("dy", (d) => d.radius + 18)
+      .attr("fill", "rgba(255,255,255,0.68)")
       .style("font-size", "12px")
-      .style("font-family", "sans-serif")
+      .style("font-family", "JetBrains Mono, monospace")
       .style("pointer-events", "none");
+
+    gsap.fromTo(
+      link.nodes(),
+      { autoAlpha: 0, scaleX: 0, transformOrigin: "50% 50%" },
+      { autoAlpha: 1, scaleX: 1, duration: 0.8, stagger: 0.015, ease: "power2.out" },
+    );
+    gsap.fromTo(
+      node.nodes(),
+      { autoAlpha: 0, scale: 0, transformOrigin: "50% 50%" },
+      { autoAlpha: 1, scale: 1, duration: 1.1, stagger: { amount: 0.8, from: "center" }, ease: "elastic.out(1, 0.55)" },
+    );
+    gsap.fromTo(
+      label.nodes(),
+      { autoAlpha: 0, y: 8 },
+      { autoAlpha: 1, y: 0, duration: 0.6, stagger: { amount: 0.55, from: "center" }, delay: 0.25 },
+    );
 
     simulation.on("tick", () => {
       link
@@ -119,13 +168,12 @@ const D3Demo = () => {
         .attr("y2", (d) => (d.target as Node).y ?? 0);
 
       node.attr("cx", (d) => d.x ?? 0).attr("cy", (d) => d.y ?? 0);
-
       label.attr("x", (d) => d.x ?? 0).attr("y", (d) => d.y ?? 0);
     });
 
-    function drag(simulation: d3.Simulation<Node, undefined>) {
+    function drag(activeSimulation: d3.Simulation<Node, undefined>) {
       function dragstarted(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
+        if (!event.active) activeSimulation.alphaTarget(0.3).restart();
         event.subject.fx = event.subject.x;
         event.subject.fy = event.subject.y;
       }
@@ -136,7 +184,7 @@ const D3Demo = () => {
       }
 
       function dragended(event: d3.D3DragEvent<SVGCircleElement, Node, Node>) {
-        if (!event.active) simulation.alphaTarget(0);
+        if (!event.active) activeSimulation.alphaTarget(0);
         event.subject.fx = null;
         event.subject.fy = null;
       }
@@ -147,48 +195,49 @@ const D3Demo = () => {
         .on("drag", dragged)
         .on("end", dragended);
     }
-  };
+  }, []);
 
   useEffect(() => {
     initGraph();
     window.addEventListener("resize", initGraph);
-    return () => window.removeEventListener("resize", initGraph);
-  }, []);
+    return () => {
+      window.removeEventListener("resize", initGraph);
+      simulationRef.current?.stop();
+    };
+  }, [initGraph]);
 
   return (
-    <div className="h-screen w-full bg-[#121212] flex flex-col relative overflow-hidden">
-      <div className="absolute top-0 left-0 p-8 z-10 w-full pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="pointer-events-auto"
+    <div ref={rootRef} className="relative flex h-screen w-full flex-col overflow-hidden bg-[#04070d] text-white">
+      <div className="demo-aurora pointer-events-none absolute -left-40 top-12 h-[32rem] w-[32rem] rounded-full bg-cyan-400/18 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-44 right-0 h-[30rem] w-[30rem] rounded-full bg-fuchsia-500/14 blur-3xl" />
+      <div className="demo-chrome pointer-events-none absolute left-0 top-0 z-10 w-full p-6 sm:p-8">
+        <button
+          onClick={() => navigate("/")}
+          className="pointer-events-auto mb-8 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-white/62 backdrop-blur-xl transition-colors hover:border-cyan-300/35 hover:text-white"
         >
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-[#B3B3B3] hover:text-white mb-8 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Home
-          </button>
+          <ArrowLeft className="h-5 w-5" />
+          Back home
+        </button>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-2">D3.js Visualization</h1>
-          <p className="text-[#B3B3B3] max-w-xl">
-            Interactive force-directed graph visualizing my technical skill network. Nodes represent
-            technologies and links represent proficiency relationships.
+        <div className="max-w-3xl rounded-[2rem] border border-white/10 bg-black/25 p-5 backdrop-blur-xl">
+          <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">force graph</div>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">A stack map that drifts</h1>
+          <p className="mt-3 max-w-xl text-white/62">
+            This is the site stack as a small physics sketch. Drag a node, let it settle, and you get a better picture than a flat list of badges.
           </p>
-        </motion.div>
+        </div>
       </div>
 
-      <div ref={containerRef} className="flex-1 w-full h-full">
-        <svg ref={svgRef} className="w-full h-full cursor-grab active:cursor-grabbing"></svg>
+      <div ref={containerRef} className="relative z-0 h-full w-full">
+        <svg ref={svgRef} className="h-full w-full cursor-grab active:cursor-grabbing" />
       </div>
 
       <button
         onClick={initGraph}
-        className="absolute bottom-8 right-8 bg-[#1DB954] text-black p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-10"
+        className="reset-button absolute bottom-8 right-8 z-10 rounded-full border border-lime-300/30 bg-lime-300 px-5 py-4 font-black text-black shadow-[0_18px_50px_rgba(190,242,100,0.25)] transition-transform hover:scale-110"
         title="Reset Simulation"
       >
-        <RefreshCw className="w-6 h-6" />
+        <RefreshCw className="h-6 w-6" />
       </button>
     </div>
   );
