@@ -21,6 +21,7 @@ import { gsap, ScrollTrigger, useGSAP } from "../lib/gsap";
 
 const marqueeItems = [
   "React screens that survive Monday",
+  "Python data pipelines",
   "Rust in the browser",
   "Trading UI edge cases",
   "Small WebGL sketches",
@@ -30,14 +31,37 @@ const marqueeItems = [
 ];
 
 const heroStats = [
-  { value: "7+", label: "years shipping web software" },
-  { value: "5", label: "teams and product rooms" },
-  { value: "24", label: "tools I reach for often" },
+  { value: "7+", label: "years shipping production software" },
+  { value: "Finance", label: "current focus: trading, data, and pipeline UI" },
+  { value: "8 cases", label: "financial frontend evidence" },
+];
+
+const targetRoles = [
+  "Frontend Engineer - Trading UI",
+  "Full-stack Engineer - Internal Platforms",
+  "React / TypeScript Engineer - Data Tools",
+  "Full-stack Engineer - Python Data Tools",
+];
+
+const hiringBrief = [
+  {
+    label: "Financial UI judgment",
+    copy: "Blotters, replay lanes, risk matrices, audit trails, pipeline monitors, and dependency maps - not generic portfolio widgets.",
+  },
+  {
+    label: "Data-to-screen thinking",
+    copy: "Python pipelines, reconciliation, and API concerns are shown beside the React screens that operations and risk users actually trust.",
+  },
+  {
+    label: "Production communication",
+    copy: "The copy explains constraints, tradeoffs, and what each case proves in an interview.",
+  },
 ];
 
 const skillGroups = [
   { label: "Frontend", icon: Braces, items: skills.frontend, accent: "#67e8f9" },
   { label: "Backend", icon: Cpu, items: skills.backend, accent: "#f7d45a" },
+  { label: "Data", icon: Network, items: skills.data, accent: "#8fffd2" },
   { label: "Cloud", icon: Cloud, items: skills.cloud, accent: "#7cff70" },
   { label: "Database", icon: Database, items: skills.database, accent: "#ff67d8" },
 ];
@@ -48,6 +72,7 @@ type LabProject = (typeof projects)[number];
 const financeSignals = [
   "Latency matters more than decoration.",
   "Dense layouts need hierarchy, not more color.",
+  "Pipelines need freshness and reason codes.",
   "Data changes faster than the page can breathe.",
   "Bad states should still look deliberate.",
 ];
@@ -55,6 +80,7 @@ const financeSignals = [
 const marketStats = [
   { value: "Realtime", label: "UI states that update without stalls" },
   { value: "Dense", label: "Tables, timelines, graphs, and overlays" },
+  { value: "Pipeline", label: "Freshness, validation, and reconciliation states" },
   { value: "Defensive", label: "Designed for error, delay, and edge cases" },
 ];
 
@@ -330,7 +356,7 @@ function Home() {
           <div>
             <div className="hero-kicker inline-flex items-center gap-3 rounded-full border border-cyan-300/20 bg-cyan-300/8 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.42em] text-cyan-100">
               <Radio className="h-4 w-4 text-cyan-300" />
-              Hong Kong / production web systems
+              Hong Kong / financial frontend candidate
             </div>
             <h1 className="mt-7 max-w-5xl text-[clamp(4rem,12vw,10.5rem)] font-black leading-[0.82] tracking-[-0.08em] text-white">
               {splitName.map((char, index) => (
@@ -340,9 +366,23 @@ function Home() {
               ))}
             </h1>
             <div className="hero-copy mt-7 max-w-2xl text-lg leading-8 text-white/68 sm:text-xl">
-              <span className="text-white">{profile.title}</span> working on trading screens, internal platforms, and browser experiments. I care about fast feedback, boring reliability, and interfaces that are still readable six months later.
+              <span className="text-white">{profile.title}</span> focused on trading screens, risk workflows, Python-backed data pipelines, and data-heavy internal platforms. This portfolio is built to show how I think about latency, density, state, and auditability in the browser.
+            </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {targetRoles.map((role) => (
+                <span key={role} className="hero-cta rounded-full border border-cyan-300/18 bg-cyan-300/8 px-3 py-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-cyan-100/82">
+                  {role}
+                </span>
+              ))}
             </div>
             <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                to="/labs"
+                className="hero-cta inline-flex items-center gap-2 rounded-full bg-cyan-200 px-5 py-3 text-sm font-black uppercase tracking-[0.22em] text-black transition-transform duration-300 hover:-translate-y-1"
+              >
+                View finance cases
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
               <a
                 href={profile.github}
                 target="_blank"
@@ -418,6 +458,37 @@ function Home() {
         </div>
       </div>
 
+      <section className="reveal-up mb-16 rounded-[2.25rem] border border-white/10 bg-[#080c14]/78 p-5 sm:p-7 lg:p-8">
+        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
+          <div>
+            <div className="section-eyebrow">Recruiter shortcut</div>
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-white md:text-5xl">
+              If you are hiring for finance frontend, start here.
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-white/58">
+              The strongest part of this site is the Browser Labs section: eight case studies designed around the front-end and data-platform problems I expect in trading, risk, operations, market data, pipelines, and controls teams.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            {hiringBrief.map((item) => (
+              <div key={item.label} className="rounded-[1.55rem] border border-white/10 bg-white/[0.035] p-4">
+                <h3 className="font-black text-white">{item.label}</h3>
+                <p className="mt-2 text-sm leading-6 text-white/55">{item.copy}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link to="/labs" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition-transform hover:-translate-y-1">
+            Open the case-study path
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          <a href={`mailto:${profile.email}?subject=Frontend%20role%20conversation`} className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white/72 transition-colors hover:border-cyan-300/45 hover:text-white">
+            Email about a role
+          </a>
+        </div>
+      </section>
+
       <div className="space-y-16 pb-10">
         <section id="experience" className="section-panel relative rounded-[2.25rem] border border-white/10 bg-white/[0.025] p-5 sm:p-7 lg:p-8">
           <div className="section-heading mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
@@ -456,7 +527,7 @@ function Home() {
               <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Browser labs for market screens</h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-white/55">
-              These are not startup landing-page demos. They are small case studies around the kind of UI problems finance teams actually hit: dense data, fast updates, audit trails, latency, and risk context.
+              These are not startup landing-page demos. They are small case studies around the kind of UI problems finance teams actually hit: dense data, fast updates, audit trails, latency, Python-backed pipelines, and risk context.
             </p>
           </div>
 
@@ -467,7 +538,7 @@ function Home() {
                 I use this section to show how I think about financial frontends: correctness first, speed second, visual polish only when it helps the user make a decision.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
               {marketStats.map((stat) => (
                 <div key={stat.value} className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
                   <div className="font-mono text-sm font-black uppercase tracking-[0.24em] text-lime-200">{stat.value}</div>
@@ -477,7 +548,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="reveal-up mb-6 grid grid-cols-1 gap-2 md:grid-cols-4">
+          <div className="reveal-up mb-6 grid grid-cols-1 gap-2 md:grid-cols-5">
             {financeSignals.map((signal) => (
               <div key={signal} className="rounded-full border border-white/10 bg-black/20 px-4 py-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/50">
                 {signal}

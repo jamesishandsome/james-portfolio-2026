@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# James Hu Portfolio 2026
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A hiring-focused portfolio for financial frontend and full-stack roles. The site is built around the kinds of UI problems that show up in trading, risk, operations, market data, Python-backed data pipelines, and compliance workflows: latency, dense tables, realtime state, validation breaks, audit trails, and visual explanation.
 
-Currently, two official plugins are available:
+## What this project is meant to prove
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Financial frontend judgment**: case studies for blotters, replay timelines, stress matrices, risk graphs, and evidence trails.
+- **Python/data pipeline awareness**: an ETL control-room case for ingestion, validation, reconciliation, freshness, and safe reruns.
+- **Browser performance awareness**: Web Workers, WebAssembly, route-level code splitting, and GSAP animations that avoid blocking interaction.
+- **Data-heavy UI craft**: D3, Three.js, React, TypeScript, Python pipeline thinking, SVG/WebGL prototypes, and dense interface composition.
+- **Production communication**: each case explains constraints, frontend moves, and what it proves in an interview.
 
-## React Compiler
+## Main routes
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- `/` - recruiter-friendly overview and navigation into the strongest proof points.
+- `/labs` - finance frontend case studies for trading, risk, market data, Python data pipelines, operations, and compliance UI.
+- `/wasm` - WASM + Web Worker compute prototype.
+- `/three` - WebGL liquidity-surface style prototype.
+- `/d3` - D3 risk/dependency graph prototype.
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+React 19, TypeScript, Vite/Rolldown, Tailwind CSS, GSAP + ScrollTrigger, D3, Three.js / React Three Fiber, Web Workers, Rust/WebAssembly demo code, and Python/FastAPI/Pandas pipeline positioning in the case-study content.
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+## Local development
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+bun install
+bun run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Quality checks
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+bun run lint
+bun run build
 ```

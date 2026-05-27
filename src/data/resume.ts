@@ -270,11 +270,42 @@ export const projects = [
     prototypeCopy: "An audit view should read like a sequence of decisions, not a stack of raw events.",
     prototypeBullets: ["Approval stamps", "Permission states", "Export trail", "Change history"],
   },
+  {
+    id: 8,
+    slug: "pipeline-observability",
+    title: "Python Data Pipeline Monitor",
+    description:
+      "A dashboard pattern for ETL jobs: ingestion, validation, reconciliation, SLA drift, and the ugly rows that need a human.",
+    color: "bg-gradient-to-br from-teal-950 via-emerald-800 to-lime-300",
+    accent: "#8fffd2",
+    link: "/labs#pipeline-observability",
+    metric: "ETL Ops",
+    domain: "Data pipelines",
+    financeUse: "Monitoring Python jobs that ingest prices, trades, reference data, and reconciliation files before they reach reporting or risk users.",
+    problem: "Pipeline failures are rarely clean. A job can be technically green while a source is late, a validation rule is noisy, or a downstream report is already wrong.",
+    constraint: "The UI needs to help engineers and operations teams see freshness, missing records, failed rules, and rerun safety without reading raw logs first.",
+    moves: [
+      "Represent the ETL path as stages instead of a flat job list",
+      "Separate source lag, validation breaks, and publish status",
+      "Make reconciliation counts visible before users download reports",
+      "Keep rerun and quarantine actions explicit so fixes are auditable",
+    ],
+    interviewAngle:
+      "This case connects my Python background with frontend judgment: I can think about the data job, the API surface, and the screen an operations user trusts at 8:30am.",
+    frontendProof: ["DAG status UI", "SLA and freshness indicators", "Reconciliation summaries", "Failure drill-down"],
+    stack: ["Python", "FastAPI", "Pandas / Polars", "PostgreSQL", "Redis", "React"],
+    signal: "Shows the bridge between backend data work and finance-facing UX.",
+    prototypeKind: "pipeline",
+    prototypeTitle: "ETL control room",
+    prototypeCopy: "Good pipeline UI tells you what arrived, what was rejected, and whether it is safe to publish.",
+    prototypeBullets: ["Stage-level health", "Source freshness", "Validation breaks", "Safe rerun cues"],
+  },
 ];
 
 export const skills = {
   frontend: ["React", "TypeScript", "WebAssembly", "Web Socket", "Web3.js", "Tauri"],
-  backend: ["Python (Django, Flask, FastAPI)", "Node.js", "Go", "Rust"],
+  backend: ["Python (FastAPI, Django, Flask)", "Node.js", "Go", "Rust"],
+  data: ["Pandas / Polars", "ETL pipelines", "Data validation", "Reconciliation jobs", "Scheduled reporting"],
   database: ["MongoDB", "PostgreSQL", "Redis"],
   cloud: ["AWS", "Azure", "Kubernetes", "Docker"],
   certifications: [

@@ -19,9 +19,19 @@ import { gsap, ScrollTrigger, useGSAP } from "../lib/gsap";
 type LabCase = (typeof projects)[number];
 
 const hiringStats = [
-  { value: "7", label: "finance-facing frontend cases" },
-  { value: "4", label: "hard UI modes: realtime, dense, audit, risk" },
+  { value: "8", label: "finance-facing frontend cases" },
+  { value: "5", label: "hard UI modes: realtime, dense, audit, risk, pipeline" },
   { value: "0", label: "generic landing-page screenshots" },
+];
+
+const roleTargets = [
+  "Trading UI",
+  "Risk platforms",
+  "Market data tools",
+  "Python data pipeline monitoring",
+  "Operations consoles",
+  "Compliance workflows",
+  "Internal developer tools",
 ];
 
 const PrototypePanel = ({ lab }: { lab: LabCase }) => {
@@ -40,6 +50,8 @@ const PrototypePanel = ({ lab }: { lab: LabCase }) => {
       return <MatrixPrototype lab={lab} />;
     case "trail":
       return <TrailPrototype lab={lab} />;
+    case "pipeline":
+      return <PipelinePrototype lab={lab} />;
     default:
       return <WorkerPrototype lab={lab} />;
   }
@@ -201,7 +213,7 @@ const MatrixPrototype = ({ lab }: { lab: LabCase }) => {
       <div className="relative z-10 rounded-[1.6rem] border border-white/10 bg-black/25 p-5">
         <div className="mb-4 flex items-center justify-between font-mono text-xs uppercase tracking-[0.22em] text-white/42">
           <span>scenario / asset class</span>
-          <span className="text-[var(--accent)]">stress +2.4σ</span>
+          <span className="text-[var(--accent)]">stress +2.4 stdev</span>
         </div>
         <div className="grid grid-cols-5 gap-2">
           {cells.map((risk, index) => (
@@ -243,6 +255,95 @@ const TrailPrototype = ({ lab }: { lab: LabCase }) => (
     </div>
   </PrototypeShell>
 );
+
+const PipelinePrototype = ({ lab }: { lab: LabCase }) => {
+  const stages = [
+    ["ingest", "source files", "98%", "on time"],
+    ["normalize", "schema map", "86%", "running"],
+    ["validate", "rules", "72%", "12 breaks"],
+    ["reconcile", "books", "64%", "review"],
+    ["publish", "risk mart", "41%", "held"],
+  ];
+
+  const checks = [
+    ["Trades", "124,088", "124,076", "12"],
+    ["Prices", "3,842", "3,842", "0"],
+    ["Ref data", "18,420", "18,417", "3"],
+  ];
+
+  return (
+    <PrototypeShell lab={lab}>
+      <div className="relative z-10 overflow-hidden rounded-[1.6rem] border border-white/10 bg-black/25 p-5">
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            ["freshness", "38s lag"],
+            ["sla", "99.94%"],
+            ["quarantine", "15 rows"],
+          ].map(([label, value]) => (
+            <div key={label} className="rounded-2xl border border-white/8 bg-white/[0.035] p-3">
+              <div className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-white/32">{label}</div>
+              <div className="mt-1 text-lg font-black text-white">{value}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="relative mt-5">
+          <div className="absolute left-8 right-8 top-[2.3rem] hidden h-px bg-gradient-to-r from-[var(--accent)]/70 via-white/16 to-amber-200/45 md:block" />
+          <div className="grid gap-3 md:grid-cols-5">
+            {stages.map(([name, label, progress, status], index) => (
+              <div key={name} className="pipeline-stage-card relative overflow-hidden rounded-2xl border border-white/10 bg-[#090d15] p-3">
+                <span
+                  className="pipeline-flow-dot pointer-events-none absolute -left-20 top-0 h-full w-16 opacity-55 blur-sm"
+                  style={{ background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }}
+                />
+                <div className="relative z-10 flex items-center justify-between">
+                  <span className="grid h-8 w-8 place-items-center rounded-xl border border-[var(--accent)]/25 bg-[var(--accent)]/10 font-mono text-[0.62rem] font-black text-[var(--accent)]">
+                    {index + 1}
+                  </span>
+                  <span className={`h-2.5 w-2.5 rounded-full ${status === "on time" ? "bg-lime-300" : status === "running" ? "bg-cyan-300" : "bg-amber-300"}`} />
+                </div>
+                <div className="relative z-10 mt-3 font-black uppercase tracking-[0.08em] text-white">{name}</div>
+                <div className="relative z-10 mt-1 text-xs text-white/40">{label}</div>
+                <div className="relative z-10 mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <div className="h-full rounded-full bg-[var(--accent)]" style={{ width: progress }} />
+                </div>
+                <div className="relative z-10 mt-2 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/38">{status}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-3 lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+            <div className="mb-3 font-mono text-[0.65rem] uppercase tracking-[0.28em] text-white/35">reconciliation sample</div>
+            <div className="grid grid-cols-[1fr_0.8fr_0.8fr_0.6fr] border-b border-white/10 pb-2 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/32">
+              <span>set</span><span>in</span><span>matched</span><span>breaks</span>
+            </div>
+            {checks.map(([set, incoming, matched, breaks]) => (
+              <div key={set} className="grid grid-cols-[1fr_0.8fr_0.8fr_0.6fr] border-b border-white/8 py-2 text-sm text-white/66 last:border-b-0">
+                <span className="font-semibold text-white/80">{set}</span>
+                <span>{incoming}</span>
+                <span>{matched}</span>
+                <span className={breaks === "0" ? "text-lime-300" : "text-amber-300"}>{breaks}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-[#05070c] p-4 font-mono text-xs leading-6 text-white/55">
+            <div className="mb-2 text-[0.65rem] uppercase tracking-[0.28em] text-[var(--accent)]">python job notes</div>
+            <div><span className="text-cyan-200">extract</span>(s3_drop)</div>
+            <div><span className="text-lime-200">validate</span>(schema, stale_rules)</div>
+            <div><span className="text-amber-200">reconcile</span>(trades, books)</div>
+            <div><span className="text-rose-200">quarantine</span>(breaks, reason)</div>
+            <div className="mt-2 rounded-xl border border-white/8 bg-white/[0.035] px-3 py-2 text-white/45">
+              rerun requires reason + audit stamp
+            </div>
+          </div>
+        </div>
+      </div>
+    </PrototypeShell>
+  );
+};
 
 const CaseChapter = ({ lab, index }: { lab: LabCase; index: number }) => {
   const reversed = index % 2 === 1;
@@ -412,6 +513,21 @@ const BrowserLabs = () => {
         stagger: 0.2,
       });
 
+      gsap.fromTo(
+        ".pipeline-flow-dot",
+        { x: -70 },
+        { x: 220, duration: 1.65, repeat: -1, ease: "none", stagger: 0.18 },
+      );
+
+      gsap.to(".pipeline-stage-card", {
+        y: -4,
+        duration: 1.4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        stagger: 0.11,
+      });
+
       ScrollTrigger.refresh();
     },
     { scope: rootRef },
@@ -450,10 +566,17 @@ const BrowserLabs = () => {
         </Link>
         <div className="mt-8 max-w-5xl">
           <div className="font-mono text-xs uppercase tracking-[0.38em] text-cyan-200/80">Finance frontend case studies</div>
-          <h1 className="mt-3 text-5xl font-black tracking-tight text-white md:text-7xl">A stronger portfolio for trading, risk, and operations UI roles.</h1>
+          <h1 className="mt-3 text-5xl font-black tracking-tight text-white md:text-7xl">Evidence for trading, risk, market data, pipeline, and operations UI roles.</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/62">
-            Each case below is written for a hiring manager who wants evidence: can the frontend stay fast, readable, auditable, and useful when financial data gets dense or urgent?
+            Each case below is written for a hiring manager who wants evidence: can the frontend stay fast, readable, auditable, and useful when financial data gets dense, late, or urgent?
           </p>
+        </div>
+        <div className="mt-6 flex flex-wrap gap-2">
+          {roleTargets.map((role) => (
+            <span key={role} className="rounded-full border border-cyan-300/18 bg-cyan-300/8 px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-cyan-100/78">
+              {role}
+            </span>
+          ))}
         </div>
         <div className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-3">
           {hiringStats.map((stat) => (
@@ -465,10 +588,11 @@ const BrowserLabs = () => {
         </div>
       </section>
 
-      <section className="relative z-10 mb-8 grid gap-3 md:grid-cols-4">
+      <section className="relative z-10 mb-8 grid gap-3 md:grid-cols-5">
         {[
           [TimerReset, "Latency", "Do not block trader workflows."],
           [TerminalSquare, "State", "Make streaming and replay states explicit."],
+          [Activity, "Pipelines", "Expose source lag and reconciliation breaks."],
           [ShieldCheck, "Controls", "Design for audit and permissions."],
           [Gauge, "Density", "Keep high-volume screens scannable."],
         ].map(([Icon, title, copy]) => {

@@ -63,6 +63,7 @@ const D3Demo = () => {
       ...skills.backend.map((s) => ({ id: s, group: 2, radius: 20 })),
       ...skills.database.map((s) => ({ id: s, group: 3, radius: 16 })),
       ...skills.cloud.map((s) => ({ id: s, group: 4, radius: 16 })),
+      ...skills.data.map((s) => ({ id: s, group: 5, radius: 17 })),
     ];
 
     const links: Link[] = [
@@ -70,10 +71,15 @@ const D3Demo = () => {
       ...skills.backend.map((s) => ({ source: "James Hu", target: s, value: 1 })),
       ...skills.database.map((s) => ({ source: "James Hu", target: s, value: 1 })),
       ...skills.cloud.map((s) => ({ source: "James Hu", target: s, value: 1 })),
+      ...skills.data.map((s) => ({ source: "James Hu", target: s, value: 1 })),
       { source: "React", target: "TypeScript", value: 2 },
       { source: "Node.js", target: "TypeScript", value: 2 },
       { source: "Node.js", target: "MongoDB", value: 2 },
-      { source: "Python (Django, Flask, FastAPI)", target: "PostgreSQL", value: 2 },
+      { source: "Python (FastAPI, Django, Flask)", target: "PostgreSQL", value: 2 },
+      { source: "Python (FastAPI, Django, Flask)", target: "Pandas / Polars", value: 2 },
+      { source: "Pandas / Polars", target: "ETL pipelines", value: 2 },
+      { source: "ETL pipelines", target: "PostgreSQL", value: 2 },
+      { source: "Reconciliation jobs", target: "Redis", value: 1.6 },
       { source: "AWS", target: "Docker", value: 2 },
       { source: "Kubernetes", target: "Docker", value: 2 },
     ];
@@ -123,7 +129,7 @@ const D3Demo = () => {
       .join("circle")
       .attr("r", (d) => d.radius)
       .attr("fill", (d) => {
-        const colors = ["#ffffff", "#67e8f9", "#f7d45a", "#7cff70", "#ff67d8"];
+        const colors = ["#ffffff", "#67e8f9", "#f7d45a", "#7cff70", "#ff67d8", "#8fffd2"];
         return colors[d.group] || "#67e8f9";
       })
       .attr("stroke", "rgba(255,255,255,0.8)")
@@ -220,11 +226,30 @@ const D3Demo = () => {
         </button>
 
         <div className="max-w-3xl rounded-[2rem] border border-white/10 bg-black/25 p-5 backdrop-blur-xl">
-          <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">force graph</div>
-          <h1 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">A stack map that drifts</h1>
+          <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">risk topology sketch</div>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Risk relationships as a graph</h1>
           <p className="mt-3 max-w-xl text-white/62">
-            This is the site stack as a small physics sketch. Drag a node, let it settle, and you get a better picture than a flat list of badges.
+            A small D3 prototype for dependency, lineage, Python pipeline, and counterparty-style relationships that are hard to read in a static table.
           </p>
+          <button
+            onClick={() => navigate("/labs#risk-graph")}
+            className="pointer-events-auto mt-4 rounded-full border border-cyan-200/25 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:border-cyan-200/45"
+          >
+            Read the finance case study
+          </button>
+        </div>
+
+        <div className="mt-6 grid max-w-4xl grid-cols-1 gap-3 md:grid-cols-3">
+          {[
+            ["Hiring signal", "I can turn relationship data into an investigative UI."],
+            ["Finance fit", "Useful for risk topology, service lineage, data pipeline maps, and exposure views."],
+            ["Frontend proof", "D3 simulation, drag interaction, labels, and resize handling."],
+          ].map(([label, copy]) => (
+            <div key={label} className="rounded-[1.5rem] border border-white/10 bg-black/28 p-4 backdrop-blur-xl">
+              <div className="font-mono text-xs uppercase tracking-[0.28em] text-cyan-200/70">{label}</div>
+              <p className="mt-2 text-sm leading-6 text-white/58">{copy}</p>
+            </div>
+          ))}
         </div>
       </div>
 

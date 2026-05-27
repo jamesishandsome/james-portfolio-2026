@@ -154,7 +154,7 @@ const Sidebar = () => {
           </div>
         </button>
         <p className="mt-3 max-w-[14rem] text-sm leading-6 text-white/62">
-          Notes from production UI work, backend glue, and the browser experiments I keep around.
+          Notes from production UI work, Python/backend glue, and the browser experiments I keep around.
         </p>
       </div>
 
@@ -182,13 +182,31 @@ const Sidebar = () => {
         })}
       </nav>
 
+      <button
+        onClick={() => navigate("/labs")}
+        className={`sidebar-item relative z-10 mt-3 flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors duration-300 ${
+          location.pathname === "/labs"
+            ? "border-cyan-300/35 bg-cyan-300/10"
+            : "border-white/8 bg-white/[0.03] hover:border-cyan-400/30 hover:bg-cyan-400/8"
+        }`}
+      >
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200">
+          <Code2 className="h-4 w-4" />
+        </span>
+        <span className="flex-1">
+          <span className="block text-sm font-semibold text-white">Finance Cases</span>
+          <span className="text-xs uppercase tracking-[0.24em] text-white/35">hiring proof</span>
+        </span>
+        <span className={`h-2.5 w-2.5 rounded-full ${location.pathname === "/labs" ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15"}`} />
+      </button>
+
       <div className="relative z-10 mt-5 rounded-[1.6rem] border border-white/10 bg-[#090c14]/90 p-4 backdrop-blur-xl">
         <div className="mb-3 flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.35em] text-white/45">
           <Sparkles className="h-4 w-4 text-amber-300" />
           Usual tools
         </div>
         <div className="grid grid-cols-2 gap-2">
-          {[...skills.frontend, ...skills.backend].slice(0, 8).map((skill) => (
+          {[...skills.frontend, ...skills.backend, ...skills.data].slice(0, 8).map((skill) => (
             <span
               key={skill}
               className="stack-chip truncate rounded-full border border-white/8 bg-white/[0.04] px-3 py-2 text-xs text-white/72 transition-all duration-300 hover:border-cyan-400/25 hover:bg-cyan-400/10 hover:text-white"

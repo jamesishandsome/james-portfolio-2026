@@ -69,10 +69,29 @@ const ThreeDemo = () => {
 
         <div className="max-w-3xl rounded-[2rem] border border-white/10 bg-black/25 p-5 backdrop-blur-xl">
           <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">webgl sketch</div>
-          <h1 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">A material test in orbit</h1>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">A market surface, not a toy scene</h1>
           <p className="mt-3 max-w-xl text-white/62">
-            A small scene for checking how motion, lighting, and camera drag feel before they become a heavier interface.
+            This is the kind of 3D layer that can help explain curves, depth, and shape in a finance product without overwhelming the user.
           </p>
+          <button
+            onClick={() => navigate("/labs#liquidity-surface")}
+            className="pointer-events-auto mt-4 rounded-full border border-cyan-200/25 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:border-cyan-200/45"
+          >
+            Read the finance case study
+          </button>
+        </div>
+
+        <div className="mt-6 grid max-w-4xl grid-cols-1 gap-3 md:grid-cols-3">
+          {[
+            ["Hiring signal", "I know how to keep 3D readable instead of decorative."],
+            ["Finance fit", "Useful for market surfaces, depth maps, and analytical overlays."],
+            ["Frontend proof", "Camera control, responsive rendering, and motion discipline."],
+          ].map(([label, copy]) => (
+            <div key={label} className="hud-card rounded-[1.5rem] border border-white/10 bg-black/28 p-4 backdrop-blur-xl">
+              <div className="font-mono text-xs uppercase tracking-[0.28em] text-cyan-200/70">{label}</div>
+              <p className="mt-2 text-sm leading-6 text-white/58">{copy}</p>
+            </div>
+          ))}
         </div>
       </div>
 
