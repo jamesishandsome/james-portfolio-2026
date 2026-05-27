@@ -1,5 +1,5 @@
 import { type CSSProperties, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   ArrowUpRight,
   Award,
@@ -43,6 +43,79 @@ const skillGroups = [
 ];
 
 const splitName = profile.name.split("");
+type LabProject = (typeof projects)[number];
+
+const financeSignals = [
+  "Latency matters more than decoration.",
+  "Dense layouts need hierarchy, not more color.",
+  "Data changes faster than the page can breathe.",
+  "Bad states should still look deliberate.",
+];
+
+const marketStats = [
+  { value: "Realtime", label: "UI states that update without stalls" },
+  { value: "Dense", label: "Tables, timelines, graphs, and overlays" },
+  { value: "Defensive", label: "Designed for error, delay, and edge cases" },
+];
+
+const LabCase = ({ project, index }: { project: LabProject; index: number }) => {
+  const body = (
+    <article
+      className="lab-case group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0f18]/90 p-5 shadow-[0_22px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+      style={{ "--accent": project.accent } as CSSProperties}
+    >
+      <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: `radial-gradient(circle at 18% 0%, ${project.accent}24, transparent 42%)` }} />
+      <div className="relative z-10 flex items-start justify-between gap-4">
+        <div>
+          <div className="font-mono text-[0.66rem] uppercase tracking-[0.34em] text-white/35">
+            Case 0{index + 1} / {project.metric}
+          </div>
+          <h3 className="mt-2 text-2xl font-black tracking-tight text-white">{project.title}</h3>
+          <p className="mt-2 text-sm uppercase tracking-[0.24em] text-[var(--accent)]">{project.domain}</p>
+        </div>
+        <span className="mt-1 h-3 w-3 shrink-0 rounded-full bg-[var(--accent)] shadow-[0_0_18px_var(--accent)]" />
+      </div>
+
+      <p className="relative z-10 mt-5 text-sm leading-7 text-white/66">{project.description}</p>
+
+      <div className="relative z-10 mt-5 rounded-[1.4rem] border border-white/10 bg-black/20 p-4">
+        <div className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-white/35">Why it matters in finance</div>
+        <p className="mt-2 text-sm leading-7 text-white/72">{project.financeUse}</p>
+      </div>
+
+      <div className="relative z-10 mt-4 flex flex-wrap gap-2">
+        {project.frontendProof.map((item) => (
+          <span key={item} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/68">
+            {item}
+          </span>
+        ))}
+      </div>
+
+      <div className="relative z-10 mt-5 flex flex-wrap gap-2">
+        {project.stack.map((item) => (
+          <span key={item} className="rounded-full border border-[var(--accent)]/25 bg-[var(--accent)]/8 px-3 py-1.5 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/78">
+            {item}
+          </span>
+        ))}
+      </div>
+
+      <p className="relative z-10 mt-auto pt-5 text-sm leading-6 text-white/55">{project.signal}</p>
+
+      <div className="relative z-10 mt-5 inline-flex items-center gap-2 self-start rounded-full border border-white/12 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white/80">
+        {project.link ? "Open case" : "Concept note"}
+        {project.link ? <ArrowUpRight className="h-4 w-4" /> : null}
+      </div>
+    </article>
+  );
+
+  return project.link ? (
+    <Link to={project.link} className="block h-full">
+      {body}
+    </Link>
+  ) : (
+    body
+  );
+};
 
 function Home() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -257,7 +330,7 @@ function Home() {
           <div>
             <div className="hero-kicker inline-flex items-center gap-3 rounded-full border border-cyan-300/20 bg-cyan-300/8 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.42em] text-cyan-100">
               <Radio className="h-4 w-4 text-cyan-300" />
-              Hong Kong · production web systems
+              Hong Kong / production web systems
             </div>
             <h1 className="mt-7 max-w-5xl text-[clamp(4rem,12vw,10.5rem)] font-black leading-[0.82] tracking-[-0.08em] text-white">
               {splitName.map((char, index) => (
@@ -379,26 +452,43 @@ function Home() {
         <section id="playground" className="lab-track-section section-panel relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#090d16]/80 p-5 sm:p-7 lg:p-8">
           <div className="section-heading mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <div className="section-eyebrow">Small experiments</div>
-              <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Browser labs</h2>
+              <div className="section-eyebrow">Finance frontend cases</div>
+              <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Browser labs for market screens</h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-white/55">
-              A few things I like to keep close: browser compute, WebGL feel, and data that moves instead of sitting in a table.
+              These are not startup landing-page demos. They are small case studies around the kind of UI problems finance teams actually hit: dense data, fast updates, audit trails, latency, and risk context.
             </p>
           </div>
+
+          <div className="reveal-up mb-5 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1.2fr]">
+            <div className="rounded-[2rem] border border-cyan-300/15 bg-cyan-300/[0.055] p-5">
+              <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">Hiring signal</div>
+              <p className="mt-3 text-lg leading-8 text-white/72">
+                I use this section to show how I think about financial frontends: correctness first, speed second, visual polish only when it helps the user make a decision.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {marketStats.map((stat) => (
+                <div key={stat.value} className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
+                  <div className="font-mono text-sm font-black uppercase tracking-[0.24em] text-lime-200">{stat.value}</div>
+                  <p className="mt-2 text-sm leading-6 text-white/55">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="reveal-up mb-6 grid grid-cols-1 gap-2 md:grid-cols-4">
+            {financeSignals.map((signal) => (
+              <div key={signal} className="rounded-full border border-white/10 bg-black/20 px-4 py-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/50">
+                {signal}
+              </div>
+            ))}
+          </div>
+
           <div className="lab-track flex gap-5 will-change-transform lg:w-max">
             {projects.map((project) => (
-              <div key={project.id} className="w-full shrink-0 lg:w-[26rem]">
-                <Card
-                  title={project.title}
-                  subtitle={project.metric}
-                  description={project.description}
-                  type="project"
-                  imageColor={project.color}
-                  link={project.link}
-                  accent={project.accent}
-                  metric={project.metric}
-                />
+              <div key={project.id} className="reveal-up min-h-[34rem] w-full shrink-0 lg:w-[34rem]">
+                <LabCase project={project} index={project.id - 1} />
               </div>
             ))}
           </div>
@@ -482,7 +572,7 @@ function Home() {
                 <div className="section-eyebrow">Contact</div>
                 <h2 className="mt-2 max-w-3xl text-4xl font-black tracking-tight text-white md:text-7xl">Send the rough version.</h2>
                 <p className="mt-5 max-w-2xl text-lg leading-8 text-white/62">
-                  If you are working on a product with sharp edges — trading tools, internal platforms, data-heavy UI — I am happy to compare notes.
+                  If you are working on a product with sharp edges - trading tools, internal platforms, data-heavy UI - I am happy to compare notes.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3 text-sm text-white/55">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">

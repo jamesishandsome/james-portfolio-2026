@@ -254,6 +254,50 @@ a {
   will-change: transform;
 }
 
+.lab-case {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.lab-case::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.26;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 82% 12%, var(--accent), transparent 18rem);
+  background-size: 28px 28px, 28px 28px, auto;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+.lab-case:hover {
+  border-color: color-mix(in srgb, var(--accent) 44%, rgba(255, 255, 255, 0.1));
+  transform: translateY(-6px);
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease;
+}
+
+.case-prototype {
+  isolation: isolate;
+  transform-style: preserve-3d;
+}
+
+.prototype-grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.34;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 84% 12%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 20rem);
+  background-size: 28px 28px, 28px 28px, auto;
+  mask-image: radial-gradient(circle at 50% 20%, black, transparent 82%);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .portfolio-page,
   .portfolio-page a,

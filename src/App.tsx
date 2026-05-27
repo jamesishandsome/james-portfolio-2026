@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 
 const Home = lazy(() => import("./pages/Home"));
+const BrowserLabs = lazy(() => import("./pages/BrowserLabs"));
 const WasmDemo = lazy(() => import("./pages/WasmDemo"));
 const ThreeDemo = lazy(() => import("./pages/ThreeDemo"));
 const D3Demo = lazy(() => import("./pages/D3Demo"));
@@ -26,6 +27,14 @@ function App() {
             element={
               <Layout>
                 <Home />
+              </Layout>
+            }
+          />
+          <Route
+            path="/labs"
+            element={
+              <Layout>
+                <BrowserLabs />
               </Layout>
             }
           />
