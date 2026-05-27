@@ -205,9 +205,11 @@ const Sidebar = () => {
           onClick={() => handleNavigation("hero")}
           className="flex w-full items-center gap-3 text-left"
         >
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white text-lg font-black text-black shadow-[0_0_24px_rgba(255,255,255,0.25)]">
-            JH
-          </div>
+          <img
+            src="/james-hu-logo.svg"
+            alt="James Hu logo"
+            className="h-12 w-12 rounded-2xl border border-cyan-300/20 bg-[#05070d] object-cover shadow-[0_0_24px_rgba(103,232,249,0.22)]"
+          />
           <div className="min-w-0">
             <div className="text-[0.68rem] uppercase tracking-[0.4em] text-cyan-300/80">James workroom</div>
             <div className="mt-1 text-xl font-black tracking-tight text-white">James Hu</div>

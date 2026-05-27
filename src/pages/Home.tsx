@@ -425,7 +425,11 @@ function Home() {
                   <span className="text-lime-300">awake</span>
                 </div>
                 <div>
-                  <div className="text-[7rem] font-black leading-none tracking-[-0.04em] text-white drop-shadow-[0_0_28px_rgba(103,232,249,0.22)] sm:text-[8.5rem]">JH</div>
+                  <img
+                    src="/james-hu-logo.svg"
+                    alt="James Hu logo"
+                    className="h-40 w-40 rounded-[2rem] border border-cyan-300/18 bg-[#05070d] object-cover shadow-[0_0_46px_rgba(103,232,249,0.18)] sm:h-52 sm:w-52"
+                  />
                   <div className="mt-4 flex flex-wrap gap-2">
                     <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-cyan-100">{profile.location}</span>
                     <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-amber-100">build notes</span>

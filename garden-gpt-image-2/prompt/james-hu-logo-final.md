@@ -1,0 +1,1 @@
+Minimal vector-style monogram icon with the exact letters "JH". Square centered composition. White and silver letters on transparent background with a very subtle cyan accent. Crisp geometric shapes, balanced negative space, readable at small favicon size. No other text, no people, no scene, no mockup.
