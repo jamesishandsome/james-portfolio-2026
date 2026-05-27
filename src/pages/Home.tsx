@@ -358,7 +358,7 @@ function Home() {
               <Radio className="h-4 w-4 text-cyan-300" />
               Hong Kong / financial frontend candidate
             </div>
-            <h1 className="mt-7 max-w-5xl text-[clamp(4rem,12vw,10.5rem)] font-black leading-[0.82] tracking-[-0.08em] text-white">
+            <h1 className="mt-7 max-w-5xl text-[clamp(3.6rem,9.5vw,8.6rem)] font-black leading-[0.86] tracking-[-0.075em] text-white">
               {splitName.map((char, index) => (
                 <span key={`${char}-${index}`} className="title-char inline-block will-change-transform">
                   {char === " " ? "\u00A0" : char}
@@ -366,16 +366,9 @@ function Home() {
               ))}
             </h1>
             <div className="hero-copy mt-7 max-w-2xl text-lg leading-8 text-white/68 sm:text-xl">
-              <span className="text-white">{profile.title}</span> focused on trading screens, risk workflows, Python-backed data pipelines, and data-heavy internal platforms. This portfolio is built to show how I think about latency, density, state, and auditability in the browser.
+              <span className="text-white">{profile.title}</span> building trading screens, risk workflows, and Python-backed data tools. I focus on latency, dense state, and audit-ready UI for finance teams.
             </div>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {targetRoles.map((role) => (
-                <span key={role} className="hero-cta rounded-full border border-cyan-300/18 bg-cyan-300/8 px-3 py-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-cyan-100/82">
-                  {role}
-                </span>
-              ))}
-            </div>
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 to="/labs"
                 className="hero-cta inline-flex items-center gap-2 rounded-full bg-cyan-200 px-5 py-3 text-sm font-black uppercase tracking-[0.22em] text-black transition-transform duration-300 hover:-translate-y-1"
@@ -399,6 +392,13 @@ function Home() {
                 <Mail className="h-4 w-4" />
                 Contact
               </a>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {targetRoles.map((role) => (
+                <span key={role} className="hero-cta rounded-full border border-cyan-300/18 bg-cyan-300/8 px-3 py-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-cyan-100/82">
+                  {role}
+                </span>
+              ))}
             </div>
             <div className="mt-8 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
               {heroStats.map((stat) => (

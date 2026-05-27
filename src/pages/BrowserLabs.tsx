@@ -566,7 +566,7 @@ const BrowserLabs = () => {
         </Link>
         <div className="mt-8 max-w-5xl">
           <div className="font-mono text-xs uppercase tracking-[0.38em] text-cyan-200/80">Finance frontend case studies</div>
-          <h1 className="mt-3 text-5xl font-black tracking-tight text-white md:text-7xl">Evidence for trading, risk, market data, pipeline, and operations UI roles.</h1>
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-white md:text-6xl">Evidence for trading UIs, risk views, market data, Python pipelines, and operations consoles.</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/62">
             Each case below is written for a hiring manager who wants evidence: can the frontend stay fast, readable, auditable, and useful when financial data gets dense, late, or urgent?
           </p>

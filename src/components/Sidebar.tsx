@@ -5,11 +5,11 @@ import { gsap, useGSAP } from "../lib/gsap";
 import { skills } from "../data/resume";
 
 const navItems = [
-  { id: "hero", label: "Home", icon: Home },
-  { id: "experience", label: "Experience", icon: Briefcase },
-  { id: "playground", label: "Playground", icon: Code2 },
-  { id: "skills", label: "Skills", icon: Award },
-  { id: "contact", label: "Contact", icon: PlusSquare },
+  { id: "hero", label: "Home", icon: Home, kicker: "Start" },
+  { id: "experience", label: "Experience", icon: Briefcase, kicker: "Work" },
+  { id: "playground", label: "Case Studies", icon: Code2, kicker: "Labs" },
+  { id: "skills", label: "Skills", icon: Award, kicker: "Stack" },
+  { id: "contact", label: "Contact", icon: PlusSquare, kicker: "Email" },
 ];
 
 const Sidebar = () => {
@@ -154,14 +154,32 @@ const Sidebar = () => {
           </div>
         </button>
         <p className="mt-3 max-w-[14rem] text-sm leading-6 text-white/62">
-          Notes from production UI work, Python/backend glue, and the browser experiments I keep around.
+          Production finance UI, Python data workflows, and browser prototypes for roles where speed and trust matter.
         </p>
       </div>
+
+      <button
+        onClick={() => navigate("/labs")}
+        className={`sidebar-item relative z-10 mb-3 flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors duration-300 ${
+          location.pathname === "/labs"
+            ? "border-cyan-300/35 bg-cyan-300/10"
+            : "border-white/8 bg-cyan-300/[0.045] hover:border-cyan-400/30 hover:bg-cyan-400/8"
+        }`}
+      >
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200">
+          <Code2 className="h-4 w-4" />
+        </span>
+        <span className="flex-1">
+          <span className="block text-sm font-semibold text-white">Finance Cases</span>
+          <span className="text-xs uppercase tracking-[0.24em] text-white/35">hiring proof</span>
+        </span>
+        <span className={`h-2.5 w-2.5 rounded-full ${location.pathname === "/labs" ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15"}`} />
+      </button>
 
       <nav className="relative z-10 flex flex-col gap-2">
         {navItems.map((item, index) => {
           const Icon = item.icon;
-          const active = activeId === item.id;
+          const active = location.pathname === "/" && activeId === item.id;
           return (
             <button
               key={item.id}
@@ -174,31 +192,13 @@ const Sidebar = () => {
               </span>
               <span className="flex-1">
                 <span className="block text-sm font-semibold text-white">{item.label}</span>
-                <span className="text-xs uppercase tracking-[0.32em] text-white/35">{item.id}</span>
+                <span className="text-xs uppercase tracking-[0.32em] text-white/35">{item.kicker}</span>
               </span>
               <span className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${active ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15 group-hover:bg-cyan-400"}`} />
             </button>
           );
         })}
       </nav>
-
-      <button
-        onClick={() => navigate("/labs")}
-        className={`sidebar-item relative z-10 mt-3 flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors duration-300 ${
-          location.pathname === "/labs"
-            ? "border-cyan-300/35 bg-cyan-300/10"
-            : "border-white/8 bg-white/[0.03] hover:border-cyan-400/30 hover:bg-cyan-400/8"
-        }`}
-      >
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200">
-          <Code2 className="h-4 w-4" />
-        </span>
-        <span className="flex-1">
-          <span className="block text-sm font-semibold text-white">Finance Cases</span>
-          <span className="text-xs uppercase tracking-[0.24em] text-white/35">hiring proof</span>
-        </span>
-        <span className={`h-2.5 w-2.5 rounded-full ${location.pathname === "/labs" ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15"}`} />
-      </button>
 
       <div className="relative z-10 mt-5 rounded-[1.6rem] border border-white/10 bg-[#090c14]/90 p-4 backdrop-blur-xl">
         <div className="mb-3 flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.35em] text-white/45">
