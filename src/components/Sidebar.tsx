@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Award, Briefcase, Code2, Home, Mail, PlusSquare, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
-import { skills } from "../data/resume";
+import { projects, skills } from "../data/resume";
 
 const navItems = [
   { id: "hero", label: "Home", icon: Home, kicker: "Start" },
@@ -16,8 +16,10 @@ const Sidebar = () => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState("hero");
+  const [activeLabSlug, setActiveLabSlug] = useState("top");
   const navigate = useNavigate();
   const location = useLocation();
+  const isLabsPage = location.pathname === "/labs";
 
   const handleNavigation = (id: string) => {
     if (location.pathname !== "/") {
@@ -31,6 +33,22 @@ const Sidebar = () => {
 
     const top = target.getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop - 24;
     setActiveId(id);
+    main.scrollTo({ top, behavior: "smooth" });
+  };
+
+  const handleLabNavigation = (slug: string) => {
+    if (!isLabsPage) {
+      navigate(slug === "top" ? "/labs" : `/labs#${slug}`);
+      return;
+    }
+
+    const main = document.querySelector<HTMLElement>(".site-main");
+    const target = slug === "top" ? document.getElementById("top") : document.getElementById(slug);
+    if (!main || !target) return;
+
+    const top = slug === "top" ? 0 : target.getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop - 20;
+    setActiveLabSlug(slug);
+    window.history.replaceState({}, document.title, slug === "top" ? "/labs" : `/labs#${slug}`);
     main.scrollTo({ top, behavior: "smooth" });
   };
 
@@ -76,6 +94,48 @@ const Sidebar = () => {
       window.removeEventListener("resize", scheduleUpdate);
     };
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isLabsPage) return;
+
+    const main = document.querySelector<HTMLElement>(".site-main");
+    if (!main) return;
+
+    let frameId = 0;
+
+    const updateActiveLab = () => {
+      const mainRect = main.getBoundingClientRect();
+      const activationLine = mainRect.top + mainRect.height * 0.42;
+      let current = "top";
+
+      projects.forEach((project) => {
+        const section = document.getElementById(project.slug);
+        if (!section) return;
+        if (section.getBoundingClientRect().top <= activationLine) {
+          current = project.slug;
+        }
+      });
+
+      setActiveLabSlug(current);
+    };
+
+    const scheduleUpdate = () => {
+      window.cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(updateActiveLab);
+    };
+
+    const timeoutIds = [120, 480, 1000].map((delay) => window.setTimeout(updateActiveLab, delay));
+    scheduleUpdate();
+    main.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      timeoutIds.forEach((id) => window.clearTimeout(id));
+      main.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
+  }, [isLabsPage, location.hash]);
 
   useGSAP(
     () => {
@@ -140,7 +200,7 @@ const Sidebar = () => {
       <div className="absolute inset-0 sidebar-grid opacity-30" aria-hidden="true" />
       <div className="absolute left-4 right-4 top-4 sidebar-radar rounded-[1.6rem] border border-cyan-400/15 bg-cyan-400/5" aria-hidden="true" />
 
-      <div className="sidebar-brand relative z-10 mb-6 rounded-[1.6rem] border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
+      <div className={`sidebar-brand relative z-10 rounded-[1.6rem] border border-white/10 bg-white/5 backdrop-blur-xl ${isLabsPage ? "mb-4 p-3" : "mb-6 p-4"}`}>
         <button
           onClick={() => handleNavigation("hero")}
           className="flex w-full items-center gap-3 text-left"
@@ -154,79 +214,148 @@ const Sidebar = () => {
           </div>
         </button>
         <p className="mt-3 max-w-[14rem] text-sm leading-6 text-white/62">
-          Production finance UI, Python data workflows, and browser prototypes for roles where speed and trust matter.
+          {isLabsPage
+            ? "Finance UI case-study map for quick recruiter scanning."
+            : "Production finance UI, Python data workflows, and browser prototypes for roles where speed and trust matter."}
         </p>
       </div>
 
-      <button
-        onClick={() => navigate("/labs")}
-        className={`sidebar-item relative z-10 mb-3 flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-colors duration-300 ${
-          location.pathname === "/labs"
-            ? "border-cyan-300/35 bg-cyan-300/10"
-            : "border-white/8 bg-cyan-300/[0.045] hover:border-cyan-400/30 hover:bg-cyan-400/8"
-        }`}
-      >
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200">
-          <Code2 className="h-4 w-4" />
-        </span>
-        <span className="flex-1">
-          <span className="block text-sm font-semibold text-white">Finance Cases</span>
-          <span className="text-xs uppercase tracking-[0.24em] text-white/35">hiring proof</span>
-        </span>
-        <span className={`h-2.5 w-2.5 rounded-full ${location.pathname === "/labs" ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15"}`} />
-      </button>
+      {isLabsPage ? (
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+          <div className="mb-2 rounded-[1.4rem] border border-cyan-300/20 bg-cyan-300/[0.055] p-3">
+            <div className="font-mono text-[0.66rem] uppercase tracking-[0.32em] text-cyan-200/80">Lab map</div>
+            <p className="mt-1 text-xs leading-5 text-white/56">8 finance cases, ordered by hiring signal.</p>
+          </div>
 
-      <nav className="relative z-10 flex flex-col gap-2">
-        {navItems.map((item, index) => {
-          const Icon = item.icon;
-          const active = location.pathname === "/" && activeId === item.id;
-          return (
+          <button
+            onClick={() => handleNavigation("hero")}
+            className="sidebar-item mb-2 flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2 text-left transition-colors duration-300 hover:border-white/18 hover:bg-white/[0.06]"
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200">
+              <Home className="h-4 w-4" />
+            </span>
+            <span className="flex-1">
+              <span className="block text-sm font-semibold text-white">Back Home</span>
+              <span className="text-[0.62rem] uppercase tracking-[0.24em] text-white/35">overview</span>
+            </span>
+          </button>
+
+          <div className="min-h-0 flex-1 overflow-y-auto pr-1 scrollbar-hide">
             <button
-              key={item.id}
-              onClick={() => handleNavigation(item.id)}
-              className="sidebar-item group relative flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-left transition-colors duration-300 hover:border-cyan-400/30 hover:bg-cyan-400/8"
-              style={{ animationDelay: `${index * 90}ms` }}
+              onClick={() => handleLabNavigation("top")}
+              className={`sidebar-item mb-1.5 flex w-full items-center gap-3 rounded-2xl border px-3 py-2 text-left transition-colors duration-300 ${
+                activeLabSlug === "top"
+                  ? "border-cyan-300/35 bg-cyan-300/10"
+                  : "border-white/8 bg-white/[0.025] hover:border-cyan-400/25 hover:bg-cyan-400/8"
+              }`}
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200 transition-transform duration-300 group-hover:scale-110 group-hover:bg-cyan-400/15">
-                <Icon className="h-4 w-4" />
+              <span className="grid h-7 w-7 place-items-center rounded-xl border border-white/8 bg-white/5 font-mono text-[0.6rem] text-cyan-100">
+                00
               </span>
               <span className="flex-1">
-                <span className="block text-sm font-semibold text-white">{item.label}</span>
-                <span className="text-xs uppercase tracking-[0.32em] text-white/35">{item.kicker}</span>
+                <span className="block text-sm font-semibold text-white">Case Index</span>
+                <span className="text-[0.58rem] uppercase tracking-[0.2em] text-white/35">recruiter path</span>
               </span>
-              <span className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${active ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15 group-hover:bg-cyan-400"}`} />
+              <span className={`h-2 w-2 rounded-full ${activeLabSlug === "top" ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15"}`} />
             </button>
-          );
-        })}
-      </nav>
 
-      <div className="relative z-10 mt-5 rounded-[1.6rem] border border-white/10 bg-[#090c14]/90 p-4 backdrop-blur-xl">
-        <div className="mb-3 flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.35em] text-white/45">
-          <Sparkles className="h-4 w-4 text-amber-300" />
-          Usual tools
+            {projects.map((project, index) => {
+              const active = activeLabSlug === project.slug;
+              return (
+                <button
+                  key={project.slug}
+                  onClick={() => handleLabNavigation(project.slug)}
+                  className={`sidebar-item mb-1.5 flex w-full items-center gap-3 rounded-2xl border px-3 py-2 text-left transition-colors duration-300 ${
+                    active
+                      ? "border-cyan-300/35 bg-cyan-300/10"
+                      : "border-white/8 bg-white/[0.025] hover:border-cyan-400/25 hover:bg-cyan-400/8"
+                  }`}
+                >
+                  <span
+                    className="grid h-7 w-7 place-items-center rounded-xl border border-white/8 bg-white/5 font-mono text-[0.6rem] font-black"
+                    style={{ color: project.accent }}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[0.82rem] font-semibold text-white">{project.title}</span>
+                    <span className="block truncate text-[0.58rem] uppercase tracking-[0.18em] text-white/35">{project.domain}</span>
+                  </span>
+                  <span className={`h-2 w-2 rounded-full ${active ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15"}`} />
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-2">
-          {[...skills.frontend, ...skills.backend, ...skills.data].slice(0, 8).map((skill) => (
-            <span
-              key={skill}
-              className="stack-chip truncate rounded-full border border-white/8 bg-white/[0.04] px-3 py-2 text-xs text-white/72 transition-all duration-300 hover:border-cyan-400/25 hover:bg-cyan-400/10 hover:text-white"
-              title={skill}
-            >
-              {skill}
+      ) : (
+        <>
+          <button
+            onClick={() => navigate("/labs")}
+            className="sidebar-item relative z-10 mb-3 flex items-center gap-3 rounded-2xl border border-white/8 bg-cyan-300/[0.045] px-4 py-3 text-left transition-colors duration-300 hover:border-cyan-400/30 hover:bg-cyan-400/8"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200">
+              <Code2 className="h-4 w-4" />
             </span>
-          ))}
-        </div>
-      </div>
+            <span className="flex-1">
+              <span className="block text-sm font-semibold text-white">Finance Cases</span>
+              <span className="text-xs uppercase tracking-[0.24em] text-white/35">hiring proof</span>
+            </span>
+            <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+          </button>
 
-      <div className="relative z-10 mt-auto rounded-[1.6rem] border border-white/10 bg-gradient-to-br from-white/8 to-white/[0.02] p-4 backdrop-blur-xl">
-        <div className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.35em] text-white/45">
-          <Mail className="h-4 w-4 text-emerald-300" />
-          Notes
-        </div>
-        <p className="mt-2 text-sm leading-6 text-white/60">
-          Best conversations usually start with a rough product edge, a slow workflow, or an interface nobody wants to maintain.
-        </p>
-      </div>
+          <nav className="relative z-10 flex flex-col gap-2">
+            {navItems.map((item, index) => {
+              const Icon = item.icon;
+              const active = activeId === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigation(item.id)}
+                  className="sidebar-item group relative flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-left transition-colors duration-300 hover:border-cyan-400/30 hover:bg-cyan-400/8"
+                  style={{ animationDelay: `${index * 90}ms` }}
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-cyan-200 transition-transform duration-300 group-hover:scale-110 group-hover:bg-cyan-400/15">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <span className="flex-1">
+                    <span className="block text-sm font-semibold text-white">{item.label}</span>
+                    <span className="text-xs uppercase tracking-[0.32em] text-white/35">{item.kicker}</span>
+                  </span>
+                  <span className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${active ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15 group-hover:bg-cyan-400"}`} />
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="relative z-10 mt-5 rounded-[1.6rem] border border-white/10 bg-[#090c14]/90 p-4 backdrop-blur-xl">
+            <div className="mb-3 flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.35em] text-white/45">
+              <Sparkles className="h-4 w-4 text-amber-300" />
+              Usual tools
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {[...skills.frontend, ...skills.backend, ...skills.data].slice(0, 8).map((skill) => (
+                <span
+                  key={skill}
+                  className="stack-chip truncate rounded-full border border-white/8 bg-white/[0.04] px-3 py-2 text-xs text-white/72 transition-all duration-300 hover:border-cyan-400/25 hover:bg-cyan-400/10 hover:text-white"
+                  title={skill}
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative z-10 mt-auto rounded-[1.6rem] border border-white/10 bg-gradient-to-br from-white/8 to-white/[0.02] p-4 backdrop-blur-xl">
+            <div className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.35em] text-white/45">
+              <Mail className="h-4 w-4 text-emerald-300" />
+              Notes
+            </div>
+            <p className="mt-2 text-sm leading-6 text-white/60">
+              Best conversations usually start with a rough product edge, a slow workflow, or an interface nobody wants to maintain.
+            </p>
+          </div>
+        </>
+      )}
     </aside>
   );
 };
