@@ -259,6 +259,15 @@ a {
   will-change: transform, opacity;
 }
 
+.lab-track-viewport {
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+}
+
+.lab-track-card {
+  scroll-snap-align: start;
+}
+
 .lab-case::before {
   content: "";
   position: absolute;

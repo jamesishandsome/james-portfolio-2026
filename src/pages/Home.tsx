@@ -271,31 +271,35 @@ function Home() {
             );
           });
 
+          const cleanupFns: Array<() => void> = [];
+
           if (isDesktop) {
-            const track = root.querySelector<HTMLElement>(".lab-track");
-            const section = root.querySelector<HTMLElement>(".lab-track-section");
-            if (track && section) {
-              const distance = () => Math.max(0, track.scrollWidth - scroller.clientWidth + 72);
-              if (distance() > 120) {
-                gsap.to(track, {
-                  x: () => -distance(),
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: section,
-                    scroller,
-                    start: "top 10%",
-                    end: () => `+=${distance() + 520}`,
-                    pin: true,
-                    scrub: 1,
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true,
-                  },
-                });
-              }
+            const viewport = root.querySelector<HTMLElement>(".lab-track-viewport");
+            if (viewport) {
+              const onWheel = (event: WheelEvent) => {
+                const maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
+                if (maxScrollLeft <= 0) return;
+
+                const primaryDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+                if (Math.abs(primaryDelta) < 1) return;
+
+                const scrollLeft = viewport.scrollLeft;
+                const canScrollLeft = scrollLeft > 1;
+                const canScrollRight = scrollLeft < maxScrollLeft - 1;
+                const shouldCapture = (primaryDelta > 0 && canScrollRight) || (primaryDelta < 0 && canScrollLeft);
+
+                if (!shouldCapture) return;
+
+                event.preventDefault();
+                event.stopPropagation();
+                viewport.scrollLeft = gsap.utils.clamp(0, maxScrollLeft, scrollLeft + primaryDelta);
+              };
+
+              viewport.addEventListener("wheel", onWheel, { passive: false });
+              cleanupFns.push(() => viewport.removeEventListener("wheel", onWheel));
             }
           }
 
-          let removePointer: (() => void) | undefined;
           if (canHover) {
             const cursor = root.querySelector<HTMLElement>(".cursor-core");
             const ring = root.querySelector<HTMLElement>(".cursor-ring");
@@ -319,18 +323,18 @@ function Home() {
                 el.addEventListener("pointerenter", onEnterInteractive);
                 el.addEventListener("pointerleave", onLeaveInteractive);
               });
-              removePointer = () => {
+              cleanupFns.push(() => {
                 root.removeEventListener("pointermove", onMove);
                 root.querySelectorAll("a, button, .orbital-card").forEach((el) => {
                   el.removeEventListener("pointerenter", onEnterInteractive);
                   el.removeEventListener("pointerleave", onLeaveInteractive);
                 });
-              };
+              });
             }
           }
 
           ScrollTrigger.refresh();
-          return () => removePointer?.();
+          return () => cleanupFns.forEach((cleanup) => cleanup());
         },
         root,
       );
@@ -560,12 +564,14 @@ function Home() {
             ))}
           </div>
 
-          <div className="lab-track flex gap-5 will-change-transform lg:w-max">
-            {projects.map((project) => (
-              <div key={project.id} className="reveal-up min-h-[34rem] w-full shrink-0 lg:w-[34rem]">
-                <LabCase project={project} index={project.id - 1} />
-              </div>
-            ))}
+          <div className="lab-track-viewport -mx-2 overflow-x-auto overflow-y-hidden px-2 pb-4 scrollbar-hide">
+            <div className="lab-track flex gap-5 will-change-transform lg:w-max">
+              {projects.map((project) => (
+                <div key={project.id} className="lab-track-card reveal-up min-h-[34rem] w-full shrink-0 lg:w-[34rem]">
+                  <LabCase project={project} index={project.id - 1} />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
