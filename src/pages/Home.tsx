@@ -228,6 +228,63 @@ function Home() {
             scrollTrigger: { trigger: root, scroller, start: "top top", end: "bottom bottom", scrub: 0.25 },
           });
 
+          const cleanupFns: Array<() => void> = [];
+
+          if (isDesktop) {
+            const labSection = root.querySelector<HTMLElement>(".lab-track-section");
+            const labSticky = root.querySelector<HTMLElement>(".lab-track-sticky");
+            const labViewport = root.querySelector<HTMLElement>(".lab-track-viewport");
+            const labTrack = root.querySelector<HTMLElement>(".lab-track");
+
+            if (labSection && labSticky && labViewport && labTrack) {
+              let sectionStart = 0;
+              let scrollDistance = 1;
+              let horizontalDistance = 0;
+              let updateFrame = 0;
+
+              const setTrackX = gsap.quickSetter(labTrack, "x", "px");
+              const updateHorizontalProgress = () => {
+                updateFrame = 0;
+                const progress = gsap.utils.clamp(0, 1, (scroller.scrollTop - sectionStart) / scrollDistance);
+                setTrackX(-horizontalDistance * progress);
+              };
+              const requestHorizontalProgress = () => {
+                if (updateFrame) return;
+                updateFrame = window.requestAnimationFrame(updateHorizontalProgress);
+              };
+              const syncStageMetrics = () => {
+                horizontalDistance = Math.max(0, labTrack.scrollWidth - labViewport.clientWidth);
+                scrollDistance = Math.max(1, horizontalDistance);
+                labSection.style.setProperty("--lab-scroll-distance", `${scrollDistance}px`);
+                labSection.style.setProperty("--lab-sticky-height", `${labSticky.offsetHeight}px`);
+                sectionStart = labSection.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+                requestHorizontalProgress();
+              };
+
+              gsap.set(labViewport, { overflowX: "hidden" });
+              gsap.set(labTrack, { x: 0 });
+              syncStageMetrics();
+
+              scroller.addEventListener("scroll", requestHorizontalProgress, { passive: true });
+              window.addEventListener("resize", syncStageMetrics);
+
+              const resizeObserver = new ResizeObserver(syncStageMetrics);
+              resizeObserver.observe(labSticky);
+              resizeObserver.observe(labViewport);
+              resizeObserver.observe(labTrack);
+
+              cleanupFns.push(() => {
+                if (updateFrame) window.cancelAnimationFrame(updateFrame);
+                scroller.removeEventListener("scroll", requestHorizontalProgress);
+                window.removeEventListener("resize", syncStageMetrics);
+                resizeObserver.disconnect();
+                labSection.style.removeProperty("--lab-scroll-distance");
+                labSection.style.removeProperty("--lab-sticky-height");
+                gsap.set(labTrack, { clearProps: "x" });
+              });
+            }
+          }
+
           ScrollTrigger.batch(".reveal-up", {
             scroller,
             start: "top 86%",
@@ -270,35 +327,6 @@ function Home() {
               },
             );
           });
-
-          const cleanupFns: Array<() => void> = [];
-
-          if (isDesktop) {
-            const viewport = root.querySelector<HTMLElement>(".lab-track-viewport");
-            if (viewport) {
-              const onWheel = (event: WheelEvent) => {
-                const maxScrollLeft = viewport.scrollWidth - viewport.clientWidth;
-                if (maxScrollLeft <= 0) return;
-
-                const primaryDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-                if (Math.abs(primaryDelta) < 1) return;
-
-                const scrollLeft = viewport.scrollLeft;
-                const canScrollLeft = scrollLeft > 1;
-                const canScrollRight = scrollLeft < maxScrollLeft - 1;
-                const shouldCapture = (primaryDelta > 0 && canScrollRight) || (primaryDelta < 0 && canScrollLeft);
-
-                if (!shouldCapture) return;
-
-                event.preventDefault();
-                event.stopPropagation();
-                viewport.scrollLeft = gsap.utils.clamp(0, maxScrollLeft, scrollLeft + primaryDelta);
-              };
-
-              viewport.addEventListener("wheel", onWheel, { passive: false });
-              cleanupFns.push(() => viewport.removeEventListener("wheel", onWheel));
-            }
-          }
 
           if (canHover) {
             const cursor = root.querySelector<HTMLElement>(".cursor-core");
@@ -345,7 +373,7 @@ function Home() {
   );
 
   return (
-    <div ref={rootRef} className="portfolio-page relative min-h-screen overflow-hidden">
+    <div ref={rootRef} className="portfolio-page relative min-h-screen">
       <div className="cursor-core" aria-hidden="true" />
       <div className="cursor-ring" aria-hidden="true" />
       <div className="scroll-progress fixed left-[19.5rem] right-2 top-2 z-50 h-px overflow-hidden rounded-full bg-white/8">
@@ -528,49 +556,51 @@ function Home() {
           </div>
         </section>
 
-        <section id="playground" className="lab-track-section section-panel relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#090d16]/80 p-5 sm:p-7 lg:p-8">
-          <div className="section-heading mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <div className="section-eyebrow">Finance frontend cases</div>
-              <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Browser labs for market screens</h2>
-            </div>
-            <p className="max-w-xl text-sm leading-7 text-white/55">
-              These are not startup landing-page demos. They are small case studies around the kind of UI problems finance teams actually hit: dense data, fast updates, audit trails, latency, Python-backed pipelines, and risk context.
-            </p>
-          </div>
-
-          <div className="reveal-up mb-5 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1.2fr]">
-            <div className="rounded-[2rem] border border-cyan-300/15 bg-cyan-300/[0.055] p-5">
-              <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">Hiring signal</div>
-              <p className="mt-3 text-lg leading-8 text-white/72">
-                I use this section to show how I think about financial frontends: correctness first, speed second, visual polish only when it helps the user make a decision.
+        <section id="playground" className="lab-track-section section-panel relative rounded-[2.25rem]">
+          <div className="lab-track-sticky overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#090d16]/80 p-5 sm:p-7 lg:p-8">
+            <div className="section-heading mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <div>
+                <div className="section-eyebrow">Finance frontend cases</div>
+                <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Browser labs for market screens</h2>
+              </div>
+              <p className="max-w-xl text-sm leading-7 text-white/55">
+                These are not startup landing-page demos. They are small case studies around the kind of UI problems finance teams actually hit: dense data, fast updates, audit trails, latency, Python-backed pipelines, and risk context.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-              {marketStats.map((stat) => (
-                <div key={stat.value} className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
-                  <div className="font-mono text-sm font-black uppercase tracking-[0.24em] text-lime-200">{stat.value}</div>
-                  <p className="mt-2 text-sm leading-6 text-white/55">{stat.label}</p>
+
+            <div className="reveal-up mb-5 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1.2fr]">
+              <div className="rounded-[2rem] border border-cyan-300/15 bg-cyan-300/[0.055] p-5">
+                <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">Hiring signal</div>
+                <p className="mt-3 text-lg leading-8 text-white/72">
+                  I use this section to show how I think about financial frontends: correctness first, speed second, visual polish only when it helps the user make a decision.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+                {marketStats.map((stat) => (
+                  <div key={stat.value} className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
+                    <div className="font-mono text-sm font-black uppercase tracking-[0.24em] text-lime-200">{stat.value}</div>
+                    <p className="mt-2 text-sm leading-6 text-white/55">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="reveal-up mb-6 grid grid-cols-1 gap-2 md:grid-cols-5">
+              {financeSignals.map((signal) => (
+                <div key={signal} className="rounded-full border border-white/10 bg-black/20 px-4 py-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/50">
+                  {signal}
                 </div>
               ))}
             </div>
-          </div>
 
-          <div className="reveal-up mb-6 grid grid-cols-1 gap-2 md:grid-cols-5">
-            {financeSignals.map((signal) => (
-              <div key={signal} className="rounded-full border border-white/10 bg-black/20 px-4 py-3 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-white/50">
-                {signal}
+            <div className="lab-track-viewport -mx-2 overflow-x-auto overflow-y-hidden px-2 pb-4 scrollbar-hide">
+              <div className="lab-track flex gap-5 will-change-transform lg:w-max">
+                {projects.map((project) => (
+                  <div key={project.id} className="lab-track-card reveal-up min-h-[34rem] w-full shrink-0 lg:w-[34rem]">
+                    <LabCase project={project} index={project.id - 1} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div className="lab-track-viewport -mx-2 overflow-x-auto overflow-y-hidden px-2 pb-4 scrollbar-hide">
-            <div className="lab-track flex gap-5 will-change-transform lg:w-max">
-              {projects.map((project) => (
-                <div key={project.id} className="lab-track-card reveal-up min-h-[34rem] w-full shrink-0 lg:w-[34rem]">
-                  <LabCase project={project} index={project.id - 1} />
-                </div>
-              ))}
             </div>
           </div>
         </section>

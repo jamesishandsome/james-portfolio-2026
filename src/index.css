@@ -259,6 +259,15 @@ a {
   will-change: transform, opacity;
 }
 
+.lab-track-section {
+  min-height: calc(var(--lab-sticky-height, 48rem) + var(--lab-scroll-distance, 0px));
+}
+
+.lab-track-sticky {
+  position: sticky;
+  top: 0;
+}
+
 .lab-track-viewport {
   scroll-snap-type: x proximity;
   overscroll-behavior-x: contain;
@@ -357,6 +366,15 @@ a {
 
   .lab-track {
     flex-direction: column;
+  }
+
+  .lab-track-section {
+    min-height: 0;
+  }
+
+  .lab-track-sticky {
+    position: relative;
+    top: auto;
   }
 }
 
