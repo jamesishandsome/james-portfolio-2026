@@ -12,22 +12,22 @@ const pageMeta: Record<string, { title: string; description: string }> = {
   "/": {
     title: "James Hu - Financial Frontend & Full-stack Developer",
     description:
-      "Financial frontend case studies, Python-aware data pipeline UI, browser compute demos, and interactive work focused on trading, risk, and operational tools.",
+      "James Hu is a full-stack developer in Hong Kong working on React, TypeScript, Python, financial frontends, and data-heavy internal tools.",
   },
   "/labs": {
     title: "Browser Labs - Finance Frontend Case Studies",
     description:
-      "Detailed case studies showing how James Hu approaches market screens, risk views, Python data pipeline monitors, replay tools, and audit-friendly interfaces.",
+      "Small browser case studies around market screens, risk views, Python data pipeline monitors, replay tools, and audit flows.",
   },
   "/wasm": {
     title: "WASM Pricing Worker - James Hu",
     description:
-      "A browser compute demo for pricing, scenario checks, and keeping trading UIs responsive under load.",
+      "A browser compute demo for pricing and scenario checks without blocking the UI.",
   },
   "/three": {
     title: "3D Liquidity Surface - James Hu",
     description:
-      "A WebGL demo for market surfaces, liquidity views, and other data-rich financial visualizations.",
+      "A WebGL demo for market surfaces, liquidity views, and readable 3D financial charts.",
   },
   "/d3": {
     title: "Risk Dependency Graph - James Hu",
@@ -84,7 +84,7 @@ const PageLoader = () => (
   <div className="grid h-screen w-full place-items-center bg-[#030406] text-white">
     <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] px-6 py-5 text-center shadow-[0_0_80px_rgba(103,232,249,0.12)] backdrop-blur-xl">
       <div className="mx-auto mb-4 h-10 w-10 rounded-full border-2 border-cyan-200/20 border-t-cyan-200 animate-spin" />
-      <div className="font-mono text-xs uppercase tracking-[0.34em] text-white/55">Opening workroom</div>
+      <div className="font-mono text-xs uppercase tracking-[0.34em] text-white/55">Loading site</div>
     </div>
   </div>
 );

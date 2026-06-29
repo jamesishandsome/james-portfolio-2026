@@ -18,9 +18,9 @@ import { gsap, ScrollTrigger, useGSAP } from "../lib/gsap";
 
 type LabCase = (typeof projects)[number];
 
-const hiringStats = [
-  { value: "8", label: "finance-facing frontend cases" },
-  { value: "5", label: "hard UI modes: realtime, dense, audit, risk, pipeline" },
+const labStats = [
+  { value: "8", label: "small finance-oriented UI cases" },
+  { value: "5", label: "common modes: realtime, dense, audit, risk, pipeline" },
   { value: "0", label: "generic landing-page screenshots" },
 ];
 
@@ -62,7 +62,7 @@ const PrototypeShell = ({ lab, children }: { lab: LabCase; children: React.React
     <div className="prototype-grid" aria-hidden="true" />
     <div className="relative z-10 mb-5 flex items-start justify-between gap-4">
       <div>
-        <div className="font-mono text-[0.66rem] uppercase tracking-[0.32em] text-white/35">prototype surface</div>
+        <div className="font-mono text-[0.66rem] uppercase tracking-[0.32em] text-white/35">prototype view</div>
         <h3 className="mt-1 text-2xl font-black tracking-tight text-white">{lab.prototypeTitle}</h3>
         <p className="mt-2 max-w-xl text-sm leading-6 text-white/58">{lab.prototypeCopy}</p>
       </div>
@@ -336,7 +336,7 @@ const PipelinePrototype = ({ lab }: { lab: LabCase }) => {
             <div><span className="text-amber-200">reconcile</span>(trades, books)</div>
             <div><span className="text-rose-200">quarantine</span>(breaks, reason)</div>
             <div className="mt-2 rounded-xl border border-white/8 bg-white/[0.035] px-3 py-2 text-white/45">
-              rerun requires reason + audit stamp
+              rerun requires a reason and a review stamp
             </div>
           </div>
         </div>
@@ -363,7 +363,7 @@ const CaseChapter = ({ lab, index }: { lab: LabCase; index: number }) => {
           <div className="grid gap-4">
             <div className="rounded-[1.7rem] border border-white/10 bg-[#0b0f18]/80 p-5">
               <div className="mb-2 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.26em] text-white/35">
-                <Gauge className="h-4 w-4 text-[var(--accent)]" /> Why finance teams care
+                <Gauge className="h-4 w-4 text-[var(--accent)]" /> Where it fits
               </div>
               <p className="text-base leading-8 text-white/68">{lab.financeUse}</p>
             </div>
@@ -385,7 +385,7 @@ const CaseChapter = ({ lab, index }: { lab: LabCase; index: number }) => {
 
             <div className="rounded-[1.7rem] border border-white/10 bg-black/20 p-5">
               <div className="mb-3 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.24em] text-white/35">
-                <Layers3 className="h-4 w-4 text-[var(--accent)]" /> Frontend moves
+                <Layers3 className="h-4 w-4 text-[var(--accent)]" /> UI notes
               </div>
               <div className="grid gap-2">
                 {lab.moves.map((move) => (
@@ -406,11 +406,11 @@ const CaseChapter = ({ lab, index }: { lab: LabCase; index: number }) => {
 
       <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_0.9fr]">
         <div className="rounded-[1.7rem] border border-white/10 bg-white/[0.035] p-5">
-          <div className="font-mono text-xs uppercase tracking-[0.28em] text-white/35">What it proves in an interview</div>
+          <div className="font-mono text-xs uppercase tracking-[0.28em] text-white/35">What I focused on</div>
           <p className="mt-3 text-base leading-8 text-white/68">{lab.interviewAngle}</p>
         </div>
         <div className="rounded-[1.7rem] border border-white/10 bg-white/[0.035] p-5">
-          <div className="font-mono text-xs uppercase tracking-[0.28em] text-white/35">Stack evidence</div>
+          <div className="font-mono text-xs uppercase tracking-[0.28em] text-white/35">Stack and details</div>
           <div className="mt-3 flex flex-wrap gap-2">
             {[...lab.frontendProof, ...lab.stack].map((item) => (
               <span key={item} className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/62">{item}</span>
@@ -566,9 +566,9 @@ const BrowserLabs = () => {
         </Link>
         <div className="mt-8 max-w-5xl">
           <div className="font-mono text-xs uppercase tracking-[0.38em] text-cyan-200/80">Finance frontend case studies</div>
-          <h1 className="mt-3 text-4xl font-black tracking-tight text-white md:text-6xl">Evidence for trading UIs, risk views, market data, Python pipelines, and operations consoles.</h1>
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-white md:text-6xl">Small browser labs for trading UIs, risk views, market data, Python pipelines, and operations consoles.</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/62">
-            Each case below is written for a hiring manager who wants evidence: can the frontend stay fast, readable, auditable, and useful when financial data gets dense, late, or urgent?
+            Each case looks at a practical UI problem: keeping dense data readable, showing delayed or stale state, replaying events, and making long-running jobs easier to follow.
           </p>
         </div>
         <div className="mt-6 flex flex-wrap gap-2">
@@ -579,7 +579,7 @@ const BrowserLabs = () => {
           ))}
         </div>
         <div className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-3">
-          {hiringStats.map((stat) => (
+          {labStats.map((stat) => (
             <div key={stat.value} className="rounded-[1.7rem] border border-white/10 bg-[#0b0f18]/80 p-5">
               <div className="font-mono text-3xl font-black text-cyan-200">{stat.value}</div>
               <p className="mt-2 text-sm leading-6 text-white/55">{stat.label}</p>
@@ -590,7 +590,7 @@ const BrowserLabs = () => {
 
       <section className="relative z-10 mb-8 grid gap-3 md:grid-cols-5">
         {[
-          [TimerReset, "Latency", "Do not block trader workflows."],
+          [TimerReset, "Latency", "Keep long-running work off the main thread."],
           [TerminalSquare, "State", "Make streaming and replay states explicit."],
           [Activity, "Pipelines", "Expose source lag and reconciliation breaks."],
           [ShieldCheck, "Controls", "Design for audit and permissions."],

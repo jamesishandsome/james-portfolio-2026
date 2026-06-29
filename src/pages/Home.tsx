@@ -20,20 +20,20 @@ import { experience, profile, projects, skills } from "../data/resume";
 import { gsap, ScrollTrigger, useGSAP } from "../lib/gsap";
 
 const marqueeItems = [
-  "React screens that survive Monday",
-  "Python data pipelines",
+  "React screens for busy Mondays",
+  "Python data jobs",
   "Rust in the browser",
-  "Trading UI edge cases",
+  "Trading UI details",
   "Small WebGL sketches",
-  "D3 maps of messy systems",
-  "AWS chores made boring",
-  "Motion with a reason",
+  "D3 maps for messy systems",
+  "AWS work made boring",
+  "Motion when it helps",
 ];
 
 const heroStats = [
-  { value: "7+", label: "years shipping production software" },
-  { value: "Finance", label: "current focus: trading, data, and pipeline UI" },
-  { value: "8 cases", label: "financial frontend evidence" },
+  { value: "7+", label: "years building production software" },
+  { value: "Finance", label: "recent focus: trading, data, and internal tools" },
+  { value: "8 cases", label: "browser demos and case notes" },
 ];
 
 const targetRoles = [
@@ -45,16 +45,16 @@ const targetRoles = [
 
 const hiringBrief = [
   {
-    label: "Financial UI judgment",
-    copy: "Blotters, replay lanes, risk matrices, audit trails, pipeline monitors, and dependency maps - not generic portfolio widgets.",
+    label: "Financial UI work",
+    copy: "Blotters, replay views, risk matrices, audit trails, pipeline monitors, and dependency maps.",
   },
   {
-    label: "Data-to-screen thinking",
-    copy: "Python pipelines, reconciliation, and API concerns are shown beside the React screens that operations and risk users actually trust.",
+    label: "Data-to-screen work",
+    copy: "Python jobs, API states, and reconciliation details shown beside the React screens users work in.",
   },
   {
-    label: "Production communication",
-    copy: "The copy explains constraints, tradeoffs, and what each case proves in an interview.",
+    label: "How the cases are written",
+    copy: "Each case explains the problem, the constraints, and what I paid attention to in the UI.",
   },
 ];
 
@@ -70,18 +70,18 @@ const splitName = profile.name.split("");
 type LabProject = (typeof projects)[number];
 
 const financeSignals = [
-  "Latency matters more than decoration.",
-  "Dense layouts need hierarchy, not more color.",
-  "Pipelines need freshness and reason codes.",
-  "Data changes faster than the page can breathe.",
-  "Bad states should still look deliberate.",
+  "Keep state clear before adding polish.",
+  "Dense screens need hierarchy.",
+  "Show freshness and reason codes.",
+  "Make slow or missing data obvious.",
+  "Design error states on purpose.",
 ];
 
 const marketStats = [
-  { value: "Realtime", label: "UI states that update without stalls" },
-  { value: "Dense", label: "Tables, timelines, graphs, and overlays" },
-  { value: "Pipeline", label: "Freshness, validation, and reconciliation states" },
-  { value: "Defensive", label: "Designed for error, delay, and edge cases" },
+  { value: "Realtime", label: "Updates without blocking the page" },
+  { value: "Dense", label: "Tables, timelines, charts, and overlays" },
+  { value: "Pipeline", label: "Freshness, validation, and reconciliation" },
+  { value: "Defensive", label: "Clear states for delays and errors" },
 ];
 
 const LabCase = ({ project, index }: { project: LabProject; index: number }) => {
@@ -105,7 +105,7 @@ const LabCase = ({ project, index }: { project: LabProject; index: number }) => 
       <p className="relative z-10 mt-5 text-sm leading-7 text-white/66">{project.description}</p>
 
       <div className="relative z-10 mt-5 rounded-[1.4rem] border border-white/10 bg-black/20 p-4">
-        <div className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-white/35">Why it matters in finance</div>
+        <div className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-white/35">Where it fits</div>
         <p className="mt-2 text-sm leading-7 text-white/72">{project.financeUse}</p>
       </div>
 
@@ -388,7 +388,7 @@ function Home() {
           <div>
             <div className="hero-kicker inline-flex items-center gap-3 rounded-full border border-cyan-300/20 bg-cyan-300/8 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.42em] text-cyan-100">
               <Radio className="h-4 w-4 text-cyan-300" />
-              Hong Kong / financial frontend candidate
+              Hong Kong / full-stack developer
             </div>
             <h1 className="mt-7 max-w-5xl text-[clamp(3.6rem,9.5vw,8.6rem)] font-black leading-[0.86] tracking-[-0.075em] text-white">
               {splitName.map((char, index) => (
@@ -398,14 +398,14 @@ function Home() {
               ))}
             </h1>
             <div className="hero-copy mt-7 max-w-2xl text-lg leading-8 text-white/68 sm:text-xl">
-              <span className="text-white">{profile.title}</span> building trading screens, risk workflows, and Python-backed data tools. I focus on latency, dense state, and audit-ready UI for finance teams.
+              <span className="text-white">{profile.title}</span> in Hong Kong. I work with React, TypeScript, Python, and data-heavy internal tools, with recent focus on financial workflows.
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 to="/labs"
                 className="hero-cta inline-flex items-center gap-2 rounded-full bg-cyan-200 px-5 py-3 text-sm font-black uppercase tracking-[0.22em] text-black transition-transform duration-300 hover:-translate-y-1"
               >
-                View finance cases
+                View case studies
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
               <a
@@ -454,7 +454,7 @@ function Home() {
               <div className="relative z-10 flex h-full flex-col justify-between rounded-[2.2rem] border border-white/10 bg-black/28 p-6 backdrop-blur-md">
                 <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.24em] text-white/45">
                   <span>profile card</span>
-                  <span className="text-lime-300">awake</span>
+                  <span className="text-lime-300">current</span>
                 </div>
                 <div>
                   <img
@@ -464,16 +464,16 @@ function Home() {
                   />
                   <div className="mt-4 flex flex-wrap gap-2">
                     <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-cyan-100">{profile.location}</span>
-                    <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-amber-100">build notes</span>
+                    <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-amber-100">notes</span>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3 font-mono text-xs text-white/55">
                   <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-                    <div className="text-white/35">now</div>
+                    <div className="text-white/35">current role</div>
                     <div className="mt-1 text-white">Morgan Stanley</div>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-                    <div className="text-white/35">keepsake</div>
+                    <div className="text-white/35">side work</div>
                     <div className="mt-1 text-white">browser labs</div>
                   </div>
                 </div>
@@ -499,10 +499,10 @@ function Home() {
           <div>
             <div className="section-eyebrow">Recruiter shortcut</div>
             <h2 className="mt-3 text-3xl font-black tracking-tight text-white md:text-5xl">
-              If you are hiring for finance frontend, start here.
+              For financial frontend roles, start with the labs.
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-8 text-white/58">
-              The strongest part of this site is the Browser Labs section: eight case studies designed around the front-end and data-platform problems I expect in trading, risk, operations, market data, pipelines, and controls teams.
+              The Browser Labs section has eight small case studies around trading screens, risk views, operations tools, market data, pipelines, and controls. They show how I think through state, data, and UI tradeoffs.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -516,7 +516,7 @@ function Home() {
         </div>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link to="/labs" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition-transform hover:-translate-y-1">
-            Open the case-study path
+            Open case studies
             <ArrowUpRight className="h-4 w-4" />
           </Link>
           <a href={`mailto:${profile.email}?subject=Frontend%20role%20conversation`} className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white/72 transition-colors hover:border-cyan-300/45 hover:text-white">
@@ -529,11 +529,11 @@ function Home() {
         <section id="experience" className="section-panel relative rounded-[2.25rem] border border-white/10 bg-white/[0.025] p-5 sm:p-7 lg:p-8">
           <div className="section-heading mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <div className="section-eyebrow">Work notes</div>
-              <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Where I have shipped</h2>
+              <div className="section-eyebrow">Experience</div>
+              <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Where I have worked</h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-white/55">
-              Finance, cloud tooling, client platforms, and a lot of UI code that people had to use every day.
+              Finance, cloud tooling, client platforms, and UI work used by people every day.
             </p>
           </div>
           <div className="relative">
@@ -561,18 +561,18 @@ function Home() {
             <div className="section-heading mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
               <div>
                 <div className="section-eyebrow">Finance frontend cases</div>
-                <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Browser labs for market screens</h2>
+                <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Small labs for market and data screens</h2>
               </div>
               <p className="max-w-xl text-sm leading-7 text-white/55">
-                These are not startup landing-page demos. They are small case studies around the kind of UI problems finance teams actually hit: dense data, fast updates, audit trails, latency, Python-backed pipelines, and risk context.
+                These are small browser demos, not full products. They cover the kind of UI work I expect in finance tools: dense data, fast updates, audit trails, background jobs, and clear error states.
               </p>
             </div>
 
             <div className="reveal-up mb-5 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1.2fr]">
               <div className="rounded-[2rem] border border-cyan-300/15 bg-cyan-300/[0.055] p-5">
-                <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">Hiring signal</div>
+                <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">What I focus on</div>
                 <p className="mt-3 text-lg leading-8 text-white/72">
-                  I use this section to show how I think about financial frontends: correctness first, speed second, visual polish only when it helps the user make a decision.
+                  The goal is straightforward: keep the page responsive, make state easy to read, and avoid decoration that gets in the way.
                 </p>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
@@ -609,10 +609,10 @@ function Home() {
           <div className="section-heading mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <div className="section-eyebrow">How I tend to work</div>
-              <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Tools, grouped by where they show up</h2>
+              <h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Tools I use in normal project work</h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-white/55">
-              Not a keyword wall. These are the parts of a system I usually end up touching: surface, service layer, runtime, and data.
+              A compact view of the stack I usually work across: frontend, services, data, cloud, and storage.
             </p>
           </div>
 
@@ -629,7 +629,7 @@ function Home() {
                         </span>
                         <div>
                           <h3 className="font-black text-white">{group.label}</h3>
-                          <p className="font-mono text-xs uppercase tracking-[0.24em] text-white/35">where it lands</p>
+                          <p className="font-mono text-xs uppercase tracking-[0.24em] text-white/35">used for</p>
                         </div>
                       </div>
                       <span className="h-2.5 w-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_16px_var(--accent)]" />
@@ -654,8 +654,8 @@ function Home() {
                     <Award className="h-5 w-5" />
                   </span>
                   <div>
-                    <h3 className="font-black text-white">Paper trail</h3>
-                    <p className="font-mono text-xs uppercase tracking-[0.24em] text-white/35">certs and school</p>
+                    <h3 className="font-black text-white">Certifications</h3>
+                    <p className="font-mono text-xs uppercase tracking-[0.24em] text-white/35">certs / education</p>
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -681,9 +681,9 @@ function Home() {
             <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
               <div>
                 <div className="section-eyebrow">Contact</div>
-                <h2 className="mt-2 max-w-3xl text-4xl font-black tracking-tight text-white md:text-7xl">Send the rough version.</h2>
+                <h2 className="mt-2 max-w-3xl text-4xl font-black tracking-tight text-white md:text-7xl">Send a note.</h2>
                 <p className="mt-5 max-w-2xl text-lg leading-8 text-white/62">
-                  If you are working on a product with sharp edges - trading tools, internal platforms, data-heavy UI - I am happy to compare notes.
+                  If you are working on a trading tool, internal platform, or data-heavy UI, I am happy to compare notes.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3 text-sm text-white/55">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">

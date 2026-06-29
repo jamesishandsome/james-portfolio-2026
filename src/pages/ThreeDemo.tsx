@@ -392,16 +392,16 @@ const ThreeDemo = () => {
         </button>
 
         <div className="max-w-3xl rounded-[2rem] border border-white/10 bg-black/30 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl">
-          <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">react three fiber / market microstructure lab</div>
-          <h1 className="mt-2 max-w-3xl text-4xl font-black tracking-tight text-white md:text-6xl">Liquidity surface with live depth, shock pockets, and shader contours.</h1>
+          <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">react three fiber / market surface lab</div>
+          <h1 className="mt-2 max-w-3xl text-4xl font-black tracking-tight text-white md:text-6xl">Liquidity surface with depth bars, stress areas, and shader contours.</h1>
           <p className="mt-3 max-w-2xl text-white/62">
-            A heavier R3F scene for finance UI interviews: custom shaders, instanced depth bars, point-cloud flow, glass risk lens, and camera rigging around a readable market surface.
+            A heavier R3F scene using custom shaders, instanced depth bars, point-cloud flow, a risk lens, and camera movement around a readable market surface.
           </p>
           <button
             onClick={() => navigate("/labs#liquidity-surface")}
             className="pointer-events-auto mt-4 rounded-full border border-cyan-200/25 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:border-cyan-200/45"
           >
-            Read the finance case study
+            Read the case study
           </button>
         </div>
 
@@ -409,8 +409,8 @@ const ThreeDemo = () => {
           {[
             [Layers3, "Shader surface", "GLSL displacement, contour bands, and transparent depth composition."],
             [Activity, "Instanced depth", "209 animated columns without 209 React mesh nodes."],
-            [Radar, "Signal field", "Point-cloud liquidity particles and moving route ribbons."],
-            [Gauge, "Finance fit", "Surface shape, stress pockets, and depth are visible without turning into a toy."],
+            [Radar, "Flow field", "Point-cloud liquidity particles and moving route ribbons."],
+            [Gauge, "Readable shape", "Surface shape, stress areas, and depth stay visible without overloading the view."],
           ].map(([Icon, label, copy]) => {
             const IconComp = Icon as typeof Layers3;
             return (

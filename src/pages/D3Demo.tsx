@@ -229,21 +229,21 @@ const D3Demo = () => {
           <div className="font-mono text-xs uppercase tracking-[0.34em] text-cyan-200/80">risk topology sketch</div>
           <h1 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl">Risk relationships as a graph</h1>
           <p className="mt-3 max-w-xl text-white/62">
-            A small D3 prototype for dependency, lineage, Python pipeline, and counterparty-style relationships that are hard to read in a static table.
+            A small D3 prototype for dependency, lineage, Python pipeline, and counterparty-style relationships that are hard to read in a table.
           </p>
           <button
             onClick={() => navigate("/labs#risk-graph")}
             className="pointer-events-auto mt-4 rounded-full border border-cyan-200/25 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition-colors hover:border-cyan-200/45"
           >
-            Read the finance case study
+            Read the case study
           </button>
         </div>
 
         <div className="mt-6 grid max-w-4xl grid-cols-1 gap-3 md:grid-cols-3">
           {[
-            ["Hiring signal", "I can turn relationship data into an investigative UI."],
-            ["Finance fit", "Useful for risk topology, service lineage, data pipeline maps, and exposure views."],
-            ["Frontend proof", "D3 simulation, drag interaction, labels, and resize handling."],
+            ["Main idea", "Turn relationship data into a view people can explore."],
+            ["Where it fits", "Useful for risk topology, service lineage, data pipeline maps, and exposure views."],
+            ["UI details", "D3 simulation, drag interaction, labels, and resize handling."],
           ].map(([label, copy]) => (
             <div key={label} className="rounded-[1.5rem] border border-white/10 bg-black/28 p-4 backdrop-blur-xl">
               <div className="font-mono text-xs uppercase tracking-[0.28em] text-cyan-200/70">{label}</div>

@@ -147,19 +147,19 @@ const WasmDemo = () => {
             </div>
             <div>
               <div className="font-mono text-xs uppercase tracking-[0.34em] text-orange-200/80">
-                browser compute for finance UI
+                browser compute demo
               </div>
               <h1 className="mt-2 bg-gradient-to-r from-orange-200 via-white to-pink-300 bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl lg:text-6xl">
                 WASM Pricing Worker
               </h1>
               <p className="mt-2 text-sm text-white/62 sm:text-base">
-                A compact prototype for the kind of pricing, scenario, or risk calculation that should never freeze a trade ticket.
+                A compact prototype for pricing, scenario, or risk calculations that should not freeze a trade ticket.
               </p>
               <button
                 onClick={() => navigate("/labs#pricing-worker")}
                 className="mt-4 rounded-full border border-orange-200/25 bg-orange-300/10 px-4 py-2 text-sm font-semibold text-orange-100 transition-colors hover:border-orange-200/45"
               >
-                Read the finance case study
+                Read the case study
               </button>
             </div>
           </div>
@@ -167,9 +167,9 @@ const WasmDemo = () => {
 
         <div className="wasm-reveal mb-8 grid grid-cols-1 gap-3 md:grid-cols-3">
           {[
-            ["Hiring signal", "I can isolate expensive browser work away from the main thread."],
-            ["Finance fit", "Useful for pricing, what-if checks, and analytics that run beside the workflow."],
-            ["Frontend proof", "Request state, timing, worker lifecycle, and responsive UI under load."],
+            ["Main idea", "Move expensive browser work away from the main thread."],
+            ["Where it fits", "Useful for pricing, what-if checks, and analytics that run beside the workflow."],
+            ["UI details", "Request state, timing, worker lifecycle, and responsive UI under load."],
           ].map(([label, copy]) => (
             <div key={label} className="rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl">
               <div className="font-mono text-xs uppercase tracking-[0.28em] text-orange-200/70">{label}</div>
@@ -311,7 +311,7 @@ const WasmDemo = () => {
         <div className="wasm-reveal mt-10 rounded-[2rem] border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl sm:mt-12 sm:p-6">
           <h3 className="text-lg sm:text-xl font-bold mb-4 flex items-center gap-2">
             <Code className="w-5 h-5 text-purple-500" />
-            What this proves to a hiring team
+            What this demo is testing
           </h3>
           <p className="text-[#B3B3B3] leading-relaxed">
             The page sends the same recursive Fibonacci job to JavaScript and to Rust compiled to
@@ -319,8 +319,8 @@ const WasmDemo = () => {
             usable while the numbers grind away.
             <br />
             <br />
-            In a real financial frontend, the same pattern protects order entry, pricing panels,
-            and risk views from becoming unusable when local computation spikes.
+            In a real financial frontend, the same pattern can keep order entry, pricing panels,
+            and risk views usable when local computation spikes.
           </p>
         </div>
       </div>

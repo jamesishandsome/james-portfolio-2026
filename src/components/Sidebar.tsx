@@ -211,14 +211,14 @@ const Sidebar = () => {
             className="h-12 w-12 rounded-2xl border border-cyan-300/20 bg-[#05070d] object-cover shadow-[0_0_24px_rgba(103,232,249,0.22)]"
           />
           <div className="min-w-0">
-            <div className="text-[0.68rem] uppercase tracking-[0.4em] text-cyan-300/80">James workroom</div>
+            <div className="text-[0.68rem] uppercase tracking-[0.4em] text-cyan-300/80">James Hu</div>
             <div className="mt-1 text-xl font-black tracking-tight text-white">James Hu</div>
           </div>
         </button>
         <p className="mt-3 max-w-[14rem] text-sm leading-6 text-white/62">
           {isLabsPage
-            ? "Finance UI case-study map for quick recruiter scanning."
-            : "Production finance UI, Python data workflows, and browser prototypes for roles where speed and trust matter."}
+            ? "Finance UI case-study map for quick scanning."
+            : "Finance UI, Python data workflows, and browser prototypes for data-heavy product work."}
         </p>
       </div>
 
@@ -226,7 +226,7 @@ const Sidebar = () => {
         <div className="relative z-10 flex min-h-0 flex-1 flex-col">
           <div className="mb-2 rounded-[1.4rem] border border-cyan-300/20 bg-cyan-300/[0.055] p-3">
             <div className="font-mono text-[0.66rem] uppercase tracking-[0.32em] text-cyan-200/80">Lab map</div>
-            <p className="mt-1 text-xs leading-5 text-white/56">8 finance cases, ordered by hiring signal.</p>
+            <p className="mt-1 text-xs leading-5 text-white/56">8 finance-oriented cases, grouped by topic.</p>
           </div>
 
           <button
@@ -256,7 +256,7 @@ const Sidebar = () => {
               </span>
               <span className="flex-1">
                 <span className="block text-sm font-semibold text-white">Case Index</span>
-                <span className="text-[0.58rem] uppercase tracking-[0.2em] text-white/35">recruiter path</span>
+                <span className="text-[0.58rem] uppercase tracking-[0.2em] text-white/35">overview</span>
               </span>
               <span className={`h-2 w-2 rounded-full ${activeLabSlug === "top" ? "bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)]" : "bg-white/15"}`} />
             </button>
@@ -300,7 +300,7 @@ const Sidebar = () => {
             </span>
             <span className="flex-1">
               <span className="block text-sm font-semibold text-white">Finance Cases</span>
-              <span className="text-xs uppercase tracking-[0.24em] text-white/35">hiring proof</span>
+              <span className="text-xs uppercase tracking-[0.24em] text-white/35">case notes</span>
             </span>
             <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
           </button>
@@ -353,7 +353,7 @@ const Sidebar = () => {
               Notes
             </div>
             <p className="mt-2 text-sm leading-6 text-white/60">
-              Best conversations usually start with a rough product edge, a slow workflow, or an interface nobody wants to maintain.
+              Good conversations usually start with a rough product edge, a slow workflow, or a screen that needs clearer states.
             </p>
           </div>
         </>
